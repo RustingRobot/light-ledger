@@ -1,3 +1,5 @@
+fyne.io/fyne/v2 v2.5.3 h1:k6LjZx6EzRZhClsuzy6vucLZBstdH2USDGHSGWq8ly8=
+fyne.io/fyne/v2 v2.5.3/go.mod h1:0GOXKqyvNwk3DLmsFu9v0oYM0ZcD1ysGnlHCerKoAmo=
 github.com/ebitengine/purego v0.8.1 h1:sdRKd6plj7KYW33EH5As6YKfe8m9zbN9JMrOjNVF/BE=
 github.com/ebitengine/purego v0.8.1/go.mod h1:iIjxzd6CiRiOG0UyXP+V1+jWqUXVjPKLAI0mRfJZTmQ=
 github.com/gen2brain/raylib-go/raygui v0.0.0-20241228120719-d58ffe1a3a73 h1:xd4Nbcl+rQPspZZUyBpkQL0OtpbROim+dK6+YAoa6Dc=
