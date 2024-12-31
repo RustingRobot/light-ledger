@@ -6,54 +6,39 @@ import (
 
 func main() {
 	rl.SetConfigFlags(rl.FlagWindowResizable)
-	rl.SetConfigFlags(rl.FlagMsaa4xHint)
-	rl.InitWindow(800, 450, "Light Ledger")
+	rl.InitWindow(900, 450, "Light Ledger")
 	defer rl.CloseWindow()
 	rl.SetTargetFPS(60)
 
 	// OpenSans licensed under the SIL Open Font License Version 1.1
 	// https://openfontlicense.org/open-font-license-official-text/
-	var font = rl.LoadFontEx("OpenSans-Medium.ttf", 512, nil, 0)
+	var font = rl.LoadFontEx("OpenSans-Regular.ttf", 212, nil, 0)
 	rl.GenTextureMipmaps(&font.Texture)
-	rl.SetTextureFilter(font.Texture, rl.FilterBilinear)
+	rl.SetTextureFilter(font.Texture, rl.FilterTrilinear)
 
-	var cur_filter = 0
-	var text = "point"
+	var shader = rl.LoadShader("", "sdf.fs")
 
 	for !rl.WindowShouldClose() {
 		rl.BeginDrawing()
-		rl.ClearBackground(rl.RayWhite)
-		if rl.IsKeyPressed(rl.KeySpace) {
-			cur_filter++
-			if cur_filter > 5 {
-				cur_filter = 0
-			}
-			switch cur_filter {
-			case 0:
-				rl.SetTextureFilter(font.Texture, rl.FilterPoint)
-				text = "point"
-			case 1:
-				rl.SetTextureFilter(font.Texture, rl.FilterBilinear)
-				text = "bilinear"
-			case 2:
-				rl.SetTextureFilter(font.Texture, rl.FilterTrilinear)
-				text = "trilinear"
-			case 3:
-				rl.SetTextureFilter(font.Texture, rl.FilterAnisotropic4x)
-				text = "anisotropic 4x"
-			case 4:
-				rl.SetTextureFilter(font.Texture, rl.FilterAnisotropic8x)
-				text = "anisotropic 8x"
-			case 5:
-				rl.SetTextureFilter(font.Texture, rl.FilterAnisotropic16x)
-				text = "anisotropic 16x"
-			}
+		rl.ClearBackground(rl.DarkGray)
+		var color = rl.White
+		var text = "By using this repository, you can significantly improve the efficiency of text rendering in your OpenGL projects."
+
+		if rl.IsKeyDown(rl.KeySpace) {
+			rl.DrawTextEx(font, "shader on", rl.Vector2{X: 20, Y: 40}, 20, 1, color)
+			rl.BeginShaderMode(shader)
+			rl.DrawTextEx(font, "shader on", rl.Vector2{X: 20, Y: 10}, 20, 1, color)
 		}
-		rl.DrawText(text, 20, 100, 20, rl.LightGray)
-		rl.DrawTextEx(font, "custom text. How cool!", rl.Vector2{X: 20, Y: 170}, 15, 1, rl.Gray)
-		rl.DrawTextEx(font, "custom text. How cool!", rl.Vector2{X: 20, Y: 200}, 20, 1, rl.Gray)
-		rl.DrawTextEx(font, "custom text. How cool!", rl.Vector2{X: 20, Y: 230}, 40, 1, rl.Gray)
-		rl.DrawTextEx(font, "custom text. How cool!", rl.Vector2{X: 20, Y: 260}, 60, 1, rl.Gray)
+
+		rl.DrawTextEx(font, text, rl.Vector2{X: 20, Y: 170}, 15, 1, color)
+		rl.DrawTextEx(font, text, rl.Vector2{X: 20, Y: 200}, 20, 1, color)
+		rl.DrawTextEx(font, text, rl.Vector2{X: 20, Y: 230}, 40, 1, color)
+		rl.DrawTextEx(font, text, rl.Vector2{X: 20, Y: 260}, 60, 1, color)
+		rl.DrawTextEx(font, text, rl.Vector2{X: 20, Y: 300}, 120, 1, color)
+
+		if rl.IsKeyDown(rl.KeySpace) {
+			rl.EndShaderMode()
+		}
 
 		rl.EndDrawing()
 	}
