@@ -1,8 +1,16 @@
 package main
 
 import (
+	_ "embed"
+
 	rl "github.com/gen2brain/raylib-go/raylib"
 )
+
+//go:embed font/OpenSans-Medium.ttf
+var font_embed []byte
+
+//go:embed font/sdf.fs
+var sdf_embed []byte
 
 func main() {
 	rl.SetConfigFlags(rl.FlagWindowResizable)
@@ -10,19 +18,16 @@ func main() {
 	defer rl.CloseWindow()
 	rl.SetTargetFPS(60)
 
-	// OpenSans licensed under the SIL Open Font License Version 1.1
-	// https://openfontlicense.org/open-font-license-official-text/
-	var font = rl.LoadFontEx("OpenSans-Regular.ttf", 212, nil, 0)
+	var font = rl.LoadFontFromMemory(".ttf", font_embed, 200, nil)
 	rl.GenTextureMipmaps(&font.Texture)
 	rl.SetTextureFilter(font.Texture, rl.FilterTrilinear)
-
-	var shader = rl.LoadShader("", "sdf.fs")
+	var shader = rl.LoadShaderFromMemory("", string(sdf_embed))
 
 	for !rl.WindowShouldClose() {
 		rl.BeginDrawing()
 		rl.ClearBackground(rl.DarkGray)
 		var color = rl.White
-		var text = "By using this repository, you can significantly improve the efficiency of text rendering in your OpenGL projects."
+		var text = "The Quick Brown Fox Jumps Over The Lazy Dog"
 
 		if rl.IsKeyDown(rl.KeySpace) {
 			rl.DrawTextEx(font, "shader on", rl.Vector2{X: 20, Y: 40}, 20, 1, color)
@@ -31,7 +36,7 @@ func main() {
 		}
 
 		rl.DrawTextEx(font, text, rl.Vector2{X: 20, Y: 170}, 15, 1, color)
-		rl.DrawTextEx(font, text, rl.Vector2{X: 20, Y: 200}, 20, 1, color)
+		rl.DrawTextEx(font, text, rl.Vector2{X: 20, Y: 200}, 25, 1, color)
 		rl.DrawTextEx(font, text, rl.Vector2{X: 20, Y: 230}, 40, 1, color)
 		rl.DrawTextEx(font, text, rl.Vector2{X: 20, Y: 260}, 60, 1, color)
 		rl.DrawTextEx(font, text, rl.Vector2{X: 20, Y: 300}, 120, 1, color)
