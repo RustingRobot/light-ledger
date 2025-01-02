@@ -1,5 +1,8 @@
 #version 330
 
+// Filter copied from the raylib example projects
+// https://github.com/raysan5/raylib/blob/master/examples/text/resources/shaders/glsl330/sdf.fs
+
 // Input vertex attributes (from vertex shader)
 in vec2 fragTexCoord;
 in vec4 fragColor;
@@ -10,8 +13,6 @@ uniform vec4 colDiffuse;
 
 // Output fragment color
 out vec4 finalColor;
-
-// NOTE: Add here your custom variables
 
 void main()
 {
