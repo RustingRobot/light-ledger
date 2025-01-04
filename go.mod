@@ -1,4 +1,4 @@
-module lightledger
+module github.com/RustingRobot/light-ledger
 
 go 1.22.0
 
