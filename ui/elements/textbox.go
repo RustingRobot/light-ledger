@@ -43,6 +43,16 @@ func (r *TextBox) Update(ctx *ui.UiBundle) {
 	}
 
 	if ctx.Selected == r {
+		if rl.IsKeyPressed(rl.KeyBackspace) && r.Placeholder_Text != "" {
+			r.Placeholder_Text = r.Placeholder_Text[:len(r.Placeholder_Text)-1]
+		}
 
+		key := rl.GetCharPressed()
+		for key > 0 {
+			if (key >= 32) && (key <= 125) {
+				r.Placeholder_Text += string(key)
+			}
+			key = rl.GetCharPressed()
+		}
 	}
 }
