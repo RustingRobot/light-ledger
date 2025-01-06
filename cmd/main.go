@@ -18,9 +18,9 @@ func main() {
 	rl.SetTargetFPS(60)
 
 	var uiBundle = ui.SetupBundle()
-	uiBundle.Add(&elements.Button{X: 100, Y: 100, Width: 300, Height: 50, On_click: func() { fmt.Println("click") }, Text: "click me", Color: rl.White})
-	uiBundle.Add(&elements.TextBox{X: 100, Y: 170, Width: 300, Height: 28, Placeholder_Text: "one", Color: rl.White})
-	uiBundle.Add(&elements.TextBox{X: 100, Y: 218, Width: 300, Height: 28, Placeholder_Text: "two", Color: rl.White})
+	uiBundle.Add(elements.NewButton(100, 100, 300, 50, "click me!", rl.White, func() { fmt.Println("click") }))
+	uiBundle.Add(elements.NewTextBox(100, 170, 300, 28, "one", rl.White))
+	uiBundle.Add(elements.NewTextBox(100, 218, 300, 28, "two", rl.White))
 
 	for !rl.WindowShouldClose() {
 		rl.BeginDrawing()
