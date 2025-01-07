@@ -15,12 +15,12 @@ var sdf_embed []byte
 type TextRenderer struct {
 	Font   rl.Font
 	Shader rl.Shader
+	Size   float32
 }
 
 func (t TextRenderer) DrawText(text string, x, y int32, color rl.Color) {
 	rl.BeginShaderMode(t.Shader)
 	rl.DrawTextEx(t.Font, text, rl.Vector2{X: float32(x), Y: float32(y)}, float32(t.Font.BaseSize)/8, 1, color)
-	//rl.DrawText(text, x, y, t.font.BaseSize, color)
 	rl.EndShaderMode()
 }
 
@@ -29,6 +29,7 @@ func getTextRenderer() TextRenderer {
 	rl.GenTextureMipmaps(&font.Texture)
 	rl.SetTextureFilter(font.Texture, rl.FilterTrilinear)
 	var shader = rl.LoadShaderFromMemory("", string(sdf_embed))
+	size := float32(font.BaseSize) / 8
 
-	return TextRenderer{Font: font, Shader: shader}
+	return TextRenderer{Font: font, Shader: shader, Size: size}
 }

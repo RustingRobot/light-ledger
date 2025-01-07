@@ -25,7 +25,7 @@ func (r *Button) Draw(ctx *ui.UiBundle) {
 		rl.DrawRectangle(r.x, r.y, r.width, r.height, rl.Color{R: r.color.R, G: r.color.G, B: r.color.B, A: r.color.A / 5})
 	}
 
-	text_size := rl.MeasureTextEx(ctx.Text_renderer.Font, r.text, float32(ctx.Text_renderer.Font.BaseSize)/8, 1)
+	text_size := rl.MeasureTextEx(ctx.Text_renderer.Font, r.text, ctx.Text_renderer.Size, 1)
 	ctx.Text_renderer.DrawText(r.text, int32(float32(r.x)+float32(r.width/2)-float32(text_size.X/2)), int32(float32(r.y)+float32(r.height/2)-float32(text_size.Y/2)), r.color)
 }
 
