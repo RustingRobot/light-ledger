@@ -37,3 +37,7 @@ func SetupBundle() UiBundle {
 	out := UiBundle{Text_renderer: getTextRenderer()}
 	return out
 }
+
+func (r *UiBundle) MeasureText(text string) rl.Vector2 {
+	return rl.MeasureTextEx(r.Text_renderer.Font, text, r.Text_renderer.Size, 1)
+}

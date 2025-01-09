@@ -32,8 +32,20 @@ func (r *TextBox) Draw(ctx *ui.UiBundle) {
 		} else {
 			rl.SetMouseCursor(rl.MouseCursorDefault)
 		}
-		cursor_x := r.x + int32(rl.MeasureTextEx(ctx.Text_renderer.Font, r.text[:r.cursor_pos], ctx.Text_renderer.Size, 1).X) + 12
+		// text selection
+		if r.cursor_pos != r.selection_pos {
+			var pos1, pos2 int32
+			if r.cursor_pos < r.selection_pos {
+				pos1 = r.x + 12 + int32(ctx.MeasureText(r.text[:r.cursor_pos]).X)
+				pos2 = int32(ctx.MeasureText(r.text[r.cursor_pos:r.selection_pos]).X)
+			} else {
+				pos1 = r.x + 12 + int32(ctx.MeasureText(r.text[:r.selection_pos]).X)
+				pos2 = int32(ctx.MeasureText(r.text[r.selection_pos:r.cursor_pos]).X)
+			}
+			rl.DrawRectangle(pos1, r.y, pos2, r.height, rl.Blue)
+		}
 		// cursor line
+		cursor_x := r.x + int32(ctx.MeasureText(r.text[:r.cursor_pos]).X) + 12
 		rl.DrawLine(cursor_x, r.y+5, cursor_x, r.y+r.height-5, r.color)
 	}
 	// outline
@@ -53,7 +65,7 @@ func (r *TextBox) Draw(ctx *ui.UiBundle) {
 func (r *TextBox) Update(ctx *ui.UiBundle) {
 	if rl.CheckCollisionPointRec(rl.GetMousePosition(), rl.Rectangle{X: float32(r.x), Y: float32(r.y), Width: float32(r.width), Height: float32(r.height)}) {
 		r.hovered = true
-		if rl.IsMouseButtonPressed(rl.MouseButtonLeft) {
+		if rl.IsMouseButtonPressed(rl.MouseButtonLeft) || rl.IsMouseButtonDown(rl.MouseButtonLeft) {
 			if ctx.Selected == r {
 				// set cursor pos
 				temp_length := 10
@@ -61,11 +73,11 @@ func (r *TextBox) Update(ctx *ui.UiBundle) {
 				mouse_pos := int(rl.GetMousePosition().X) - int(r.x) - 10
 				char_nr := 0
 
-				temp_length = int(rl.MeasureTextEx(ctx.Text_renderer.Font, r.text[:char_nr], ctx.Text_renderer.Size, 1).X)
+				temp_length = int(ctx.MeasureText(r.text[:char_nr]).X)
 				for temp_length < mouse_pos && len(r.text) > char_nr {
 					char_nr++
 					last_length = temp_length
-					temp_length = int(rl.MeasureTextEx(ctx.Text_renderer.Font, r.text[:char_nr], ctx.Text_renderer.Size, 1).X)
+					temp_length = int(ctx.MeasureText(r.text[:char_nr]).X)
 				}
 				if char_nr == 0 {
 					r.cursor_pos = 0
@@ -77,6 +89,9 @@ func (r *TextBox) Update(ctx *ui.UiBundle) {
 					} else {
 						r.cursor_pos = char_nr - 1
 					}
+				}
+				if !shiftDown() && rl.IsMouseButtonPressed(rl.MouseButtonLeft) {
+					r.selection_pos = r.cursor_pos
 				}
 
 			} else {
@@ -91,6 +106,7 @@ func (r *TextBox) Update(ctx *ui.UiBundle) {
 		if rl.IsKeyPressed(rl.KeyBackspace) && r.cursor_pos > 0 {
 			r.text = r.text[:r.cursor_pos-1] + r.text[r.cursor_pos:]
 			r.cursor_pos--
+			r.selection_pos--
 		}
 
 		key := rl.GetCharPressed()
@@ -98,16 +114,43 @@ func (r *TextBox) Update(ctx *ui.UiBundle) {
 			if (key >= 32) && (key <= 125) {
 				r.text = r.text[:r.cursor_pos] + string(key) + r.text[r.cursor_pos:]
 				r.cursor_pos++
+				r.selection_pos++
 			}
 			key = rl.GetCharPressed()
 		}
 
 		if rl.IsKeyPressed(rl.KeyLeft) && r.cursor_pos > 0 {
-			r.cursor_pos--
+			if shiftDown() {
+				r.cursor_pos--
+			} else if r.cursor_pos > r.selection_pos {
+				r.cursor_pos = r.selection_pos
+			} else if r.cursor_pos < r.selection_pos {
+				r.selection_pos = r.cursor_pos
+			} else {
+				r.selection_pos--
+				r.cursor_pos--
+			}
+		} else if rl.IsKeyPressed(rl.KeyLeft) && !shiftDown() {
+			r.selection_pos = 0
 		}
 
 		if rl.IsKeyPressed(rl.KeyRight) && int(r.cursor_pos) < len(r.text) {
-			r.cursor_pos++
+			if shiftDown() {
+				r.cursor_pos++
+			} else if r.cursor_pos < r.selection_pos {
+				r.cursor_pos = r.selection_pos
+			} else if r.cursor_pos > r.selection_pos {
+				r.selection_pos = r.cursor_pos
+			} else {
+				r.selection_pos++
+				r.cursor_pos++
+			}
+		} else if rl.IsKeyPressed(rl.KeyRight) && !shiftDown() {
+			r.selection_pos = len(r.text)
 		}
 	}
+}
+
+func shiftDown() bool {
+	return rl.IsKeyDown(rl.KeyLeftShift) || rl.IsKeyDown(rl.KeyRightShift)
 }
