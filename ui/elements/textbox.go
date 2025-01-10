@@ -96,6 +96,7 @@ func (r *TextBox) Update(ctx *ui.UiBundle) {
 
 			} else {
 				ctx.Selected = r
+				r.selection_pos = r.cursor_pos
 			}
 		}
 	} else {
@@ -103,10 +104,18 @@ func (r *TextBox) Update(ctx *ui.UiBundle) {
 	}
 
 	if ctx.Selected == r {
-		if rl.IsKeyPressed(rl.KeyBackspace) && r.cursor_pos > 0 {
-			r.text = r.text[:r.cursor_pos-1] + r.text[r.cursor_pos:]
-			r.cursor_pos--
-			r.selection_pos--
+		if rl.IsKeyPressed(rl.KeyBackspace) {
+			if r.cursor_pos > r.selection_pos {
+				r.text = r.text[:r.selection_pos] + r.text[r.cursor_pos:]
+				r.cursor_pos = r.selection_pos
+			} else if r.cursor_pos < r.selection_pos {
+				r.text = r.text[:r.cursor_pos] + r.text[r.selection_pos:]
+				r.selection_pos = r.cursor_pos
+			} else if r.cursor_pos > 0 {
+				r.text = r.text[:r.cursor_pos-1] + r.text[r.cursor_pos:]
+				r.cursor_pos--
+				r.selection_pos--
+			}
 		}
 
 		key := rl.GetCharPressed()
