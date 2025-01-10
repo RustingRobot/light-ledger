@@ -104,6 +104,7 @@ func (r *TextBox) Update(ctx *ui.UiBundle) {
 	}
 
 	if ctx.Selected == r {
+		// backspace
 		if rl.IsKeyPressed(rl.KeyBackspace) {
 			if r.cursor_pos > r.selection_pos {
 				r.text = r.text[:r.selection_pos] + r.text[r.cursor_pos:]
@@ -118,16 +119,28 @@ func (r *TextBox) Update(ctx *ui.UiBundle) {
 			}
 		}
 
+		//text input
 		key := rl.GetCharPressed()
 		for key > 0 {
 			if (key >= 32) && (key <= 125) {
-				r.text = r.text[:r.cursor_pos] + string(key) + r.text[r.cursor_pos:]
-				r.cursor_pos++
-				r.selection_pos++
+				if r.cursor_pos == r.selection_pos {
+					r.text = r.text[:r.cursor_pos] + string(key) + r.text[r.cursor_pos:]
+					r.cursor_pos++
+					r.selection_pos++
+				} else if r.cursor_pos > r.selection_pos {
+					r.text = r.text[:r.selection_pos] + string(key) + r.text[r.cursor_pos:]
+					r.selection_pos++
+					r.cursor_pos = r.selection_pos
+				} else {
+					r.text = r.text[:r.cursor_pos] + string(key) + r.text[r.selection_pos:]
+					r.cursor_pos++
+					r.selection_pos = r.cursor_pos
+				}
 			}
 			key = rl.GetCharPressed()
 		}
 
+		// move with arrow keys
 		if rl.IsKeyPressed(rl.KeyLeft) && r.cursor_pos > 0 {
 			if shiftDown() {
 				r.cursor_pos--
@@ -157,9 +170,59 @@ func (r *TextBox) Update(ctx *ui.UiBundle) {
 		} else if rl.IsKeyPressed(rl.KeyRight) && !shiftDown() {
 			r.selection_pos = len(r.text)
 		}
+
+		// select all ctrl + a
+		if rl.IsKeyPressed(rl.KeyA) && ctrlDown() {
+			r.selection_pos = 0
+			r.cursor_pos = len(r.text)
+		}
+
+		// paste ctrl + v
+		if rl.IsKeyPressed(rl.KeyV) && ctrlDown() {
+			cb_text := rl.GetClipboardText()
+			if r.cursor_pos == r.selection_pos {
+				r.text = r.text[:r.cursor_pos] + cb_text + r.text[r.cursor_pos:]
+				r.cursor_pos += len(cb_text)
+				r.selection_pos = r.cursor_pos
+			} else if r.cursor_pos > r.selection_pos {
+				r.text = r.text[:r.selection_pos] + cb_text + r.text[r.cursor_pos:]
+				r.selection_pos += len(cb_text)
+				r.cursor_pos = r.selection_pos
+			} else {
+				r.text = r.text[:r.cursor_pos] + cb_text + r.text[r.selection_pos:]
+				r.cursor_pos += len(cb_text)
+				r.selection_pos = r.cursor_pos
+			}
+		}
+
+		// copy ctrl + c
+		if rl.IsKeyPressed(rl.KeyC) && ctrlDown() {
+			if r.cursor_pos > r.selection_pos {
+				rl.SetClipboardText(r.text[r.selection_pos:r.cursor_pos])
+			} else {
+				rl.SetClipboardText(r.text[r.cursor_pos:r.selection_pos])
+			}
+		}
+
+		// cut ctrl + x
+		if rl.IsKeyPressed(rl.KeyX) && ctrlDown() {
+			if r.cursor_pos > r.selection_pos {
+				rl.SetClipboardText(r.text[r.selection_pos:r.cursor_pos])
+				r.text = r.text[:r.selection_pos] + r.text[r.cursor_pos:]
+				r.cursor_pos = r.selection_pos
+			} else if r.cursor_pos < r.selection_pos {
+				rl.SetClipboardText(r.text[r.cursor_pos:r.selection_pos])
+				r.text = r.text[:r.cursor_pos] + r.text[r.selection_pos:]
+				r.selection_pos = r.cursor_pos
+			}
+		}
 	}
 }
 
 func shiftDown() bool {
 	return rl.IsKeyDown(rl.KeyLeftShift) || rl.IsKeyDown(rl.KeyRightShift)
+}
+
+func ctrlDown() bool {
+	return rl.IsKeyDown(rl.KeyLeftControl) || rl.IsKeyDown(rl.KeyRightControl)
 }
