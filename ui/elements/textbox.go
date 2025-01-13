@@ -24,6 +24,7 @@ func NewTextBox(X int32, Y int32, Width int32, Height int32, Placeholder_text st
 }
 
 func (r *TextBox) Draw(ctx *ui.UiBundle) {
+	rl.BeginScissorMode(r.x, r.y, r.width, r.height)
 	temp_color := r.color
 	if ctx.Selected == r {
 		temp_color = rl.Red
@@ -60,6 +61,7 @@ func (r *TextBox) Draw(ctx *ui.UiBundle) {
 	} else {
 		ctx.Text_renderer.DrawText(r.text, r.x+10, r.y, r.color)
 	}
+	rl.EndScissorMode()
 }
 
 func (r *TextBox) Update(ctx *ui.UiBundle) {
