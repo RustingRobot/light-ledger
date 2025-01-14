@@ -30,6 +30,5 @@ func getTextRenderer() TextRenderer {
 	rl.SetTextureFilter(font.Texture, rl.FilterTrilinear)
 	var shader = rl.LoadShaderFromMemory("", string(sdf_embed))
 	size := float32(font.BaseSize) / 8
-
 	return TextRenderer{Font: font, Shader: shader, Size: size}
 }

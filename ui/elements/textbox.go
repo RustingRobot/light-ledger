@@ -12,7 +12,7 @@ type TextBox struct {
 	x, y             int32
 	width, height    int32
 	placeholder_text string
-	text             string
+	Text             string
 	color            rl.Color
 	hovered          bool
 	cursor_pos       int
@@ -37,16 +37,16 @@ func (r *TextBox) Draw(ctx *ui.UiBundle) {
 		if r.cursor_pos != r.selection_pos {
 			var pos1, pos2 int32
 			if r.cursor_pos < r.selection_pos {
-				pos1 = r.x + 12 + int32(ctx.MeasureText(r.text[:r.cursor_pos]).X)
-				pos2 = int32(ctx.MeasureText(r.text[r.cursor_pos:r.selection_pos]).X)
+				pos1 = r.x + 12 + int32(ctx.MeasureText(r.Text[:r.cursor_pos]).X)
+				pos2 = int32(ctx.MeasureText(r.Text[r.cursor_pos:r.selection_pos]).X)
 			} else {
-				pos1 = r.x + 12 + int32(ctx.MeasureText(r.text[:r.selection_pos]).X)
-				pos2 = int32(ctx.MeasureText(r.text[r.selection_pos:r.cursor_pos]).X)
+				pos1 = r.x + 12 + int32(ctx.MeasureText(r.Text[:r.selection_pos]).X)
+				pos2 = int32(ctx.MeasureText(r.Text[r.selection_pos:r.cursor_pos]).X)
 			}
 			rl.DrawRectangle(pos1, r.y, pos2, r.height, rl.Blue)
 		}
 		// cursor line
-		cursor_x := r.x + int32(ctx.MeasureText(r.text[:r.cursor_pos]).X) + 12
+		cursor_x := r.x + int32(ctx.MeasureText(r.Text[:r.cursor_pos]).X) + 12
 		rl.DrawLine(cursor_x, r.y+5, cursor_x, r.y+r.height-5, r.color)
 	}
 	// outline
@@ -56,10 +56,10 @@ func (r *TextBox) Draw(ctx *ui.UiBundle) {
 		rl.DrawRectangle(r.x, r.y, r.width, r.height, rl.Color{R: r.color.R, G: r.color.G, B: r.color.B, A: r.color.A / 5})
 	}
 
-	if r.text == "" {
+	if r.Text == "" {
 		ctx.Text_renderer.DrawText(r.placeholder_text, r.x+10, r.y, rl.Color{R: r.color.R, G: r.color.G, B: r.color.B, A: r.color.A / 5})
 	} else {
-		ctx.Text_renderer.DrawText(r.text, r.x+10, r.y, r.color)
+		ctx.Text_renderer.DrawText(r.Text, r.x+10, r.y, r.color)
 	}
 	rl.EndScissorMode()
 }
@@ -75,16 +75,16 @@ func (r *TextBox) Update(ctx *ui.UiBundle) {
 				mouse_pos := int(rl.GetMousePosition().X) - int(r.x) - 10
 				char_nr := 0
 
-				temp_length = int(ctx.MeasureText(r.text[:char_nr]).X)
-				for temp_length < mouse_pos && len(r.text) > char_nr {
+				temp_length = int(ctx.MeasureText(r.Text[:char_nr]).X)
+				for temp_length < mouse_pos && len(r.Text) > char_nr {
 					char_nr++
 					last_length = temp_length
-					temp_length = int(ctx.MeasureText(r.text[:char_nr]).X)
+					temp_length = int(ctx.MeasureText(r.Text[:char_nr]).X)
 				}
 				if char_nr == 0 {
 					r.cursor_pos = 0
-				} else if len(r.text) == char_nr && temp_length < int(rl.GetMousePosition().X)-int(r.x)-10 {
-					r.cursor_pos = len(r.text)
+				} else if len(r.Text) == char_nr && temp_length < int(rl.GetMousePosition().X)-int(r.x)-10 {
+					r.cursor_pos = len(r.Text)
 				} else {
 					if math.Abs(float64(temp_length)-float64(mouse_pos)) < math.Abs(float64(last_length)-float64(mouse_pos)) {
 						r.cursor_pos = char_nr
@@ -109,13 +109,13 @@ func (r *TextBox) Update(ctx *ui.UiBundle) {
 		// backspace
 		if rl.IsKeyPressed(rl.KeyBackspace) {
 			if r.cursor_pos > r.selection_pos {
-				r.text = r.text[:r.selection_pos] + r.text[r.cursor_pos:]
+				r.Text = r.Text[:r.selection_pos] + r.Text[r.cursor_pos:]
 				r.cursor_pos = r.selection_pos
 			} else if r.cursor_pos < r.selection_pos {
-				r.text = r.text[:r.cursor_pos] + r.text[r.selection_pos:]
+				r.Text = r.Text[:r.cursor_pos] + r.Text[r.selection_pos:]
 				r.selection_pos = r.cursor_pos
 			} else if r.cursor_pos > 0 {
-				r.text = r.text[:r.cursor_pos-1] + r.text[r.cursor_pos:]
+				r.Text = r.Text[:r.cursor_pos-1] + r.Text[r.cursor_pos:]
 				r.cursor_pos--
 				r.selection_pos--
 			}
@@ -126,15 +126,15 @@ func (r *TextBox) Update(ctx *ui.UiBundle) {
 		for key > 0 {
 			if (key >= 32) && (key <= 125) {
 				if r.cursor_pos == r.selection_pos {
-					r.text = r.text[:r.cursor_pos] + string(key) + r.text[r.cursor_pos:]
+					r.Text = r.Text[:r.cursor_pos] + string(key) + r.Text[r.cursor_pos:]
 					r.cursor_pos++
 					r.selection_pos++
 				} else if r.cursor_pos > r.selection_pos {
-					r.text = r.text[:r.selection_pos] + string(key) + r.text[r.cursor_pos:]
+					r.Text = r.Text[:r.selection_pos] + string(key) + r.Text[r.cursor_pos:]
 					r.selection_pos++
 					r.cursor_pos = r.selection_pos
 				} else {
-					r.text = r.text[:r.cursor_pos] + string(key) + r.text[r.selection_pos:]
+					r.Text = r.Text[:r.cursor_pos] + string(key) + r.Text[r.selection_pos:]
 					r.cursor_pos++
 					r.selection_pos = r.cursor_pos
 				}
@@ -158,7 +158,7 @@ func (r *TextBox) Update(ctx *ui.UiBundle) {
 			r.selection_pos = 0
 		}
 
-		if rl.IsKeyPressed(rl.KeyRight) && int(r.cursor_pos) < len(r.text) {
+		if rl.IsKeyPressed(rl.KeyRight) && int(r.cursor_pos) < len(r.Text) {
 			if shiftDown() {
 				r.cursor_pos++
 			} else if r.cursor_pos < r.selection_pos {
@@ -170,28 +170,28 @@ func (r *TextBox) Update(ctx *ui.UiBundle) {
 				r.cursor_pos++
 			}
 		} else if rl.IsKeyPressed(rl.KeyRight) && !shiftDown() {
-			r.selection_pos = len(r.text)
+			r.selection_pos = len(r.Text)
 		}
 
 		// select all ctrl + a
 		if rl.IsKeyPressed(rl.KeyA) && ctrlDown() {
 			r.selection_pos = 0
-			r.cursor_pos = len(r.text)
+			r.cursor_pos = len(r.Text)
 		}
 
 		// paste ctrl + v
 		if rl.IsKeyPressed(rl.KeyV) && ctrlDown() {
 			cb_text := rl.GetClipboardText()
 			if r.cursor_pos == r.selection_pos {
-				r.text = r.text[:r.cursor_pos] + cb_text + r.text[r.cursor_pos:]
+				r.Text = r.Text[:r.cursor_pos] + cb_text + r.Text[r.cursor_pos:]
 				r.cursor_pos += len(cb_text)
 				r.selection_pos = r.cursor_pos
 			} else if r.cursor_pos > r.selection_pos {
-				r.text = r.text[:r.selection_pos] + cb_text + r.text[r.cursor_pos:]
+				r.Text = r.Text[:r.selection_pos] + cb_text + r.Text[r.cursor_pos:]
 				r.selection_pos += len(cb_text)
 				r.cursor_pos = r.selection_pos
 			} else {
-				r.text = r.text[:r.cursor_pos] + cb_text + r.text[r.selection_pos:]
+				r.Text = r.Text[:r.cursor_pos] + cb_text + r.Text[r.selection_pos:]
 				r.cursor_pos += len(cb_text)
 				r.selection_pos = r.cursor_pos
 			}
@@ -200,21 +200,21 @@ func (r *TextBox) Update(ctx *ui.UiBundle) {
 		// copy ctrl + c
 		if rl.IsKeyPressed(rl.KeyC) && ctrlDown() {
 			if r.cursor_pos > r.selection_pos {
-				rl.SetClipboardText(r.text[r.selection_pos:r.cursor_pos])
+				rl.SetClipboardText(r.Text[r.selection_pos:r.cursor_pos])
 			} else {
-				rl.SetClipboardText(r.text[r.cursor_pos:r.selection_pos])
+				rl.SetClipboardText(r.Text[r.cursor_pos:r.selection_pos])
 			}
 		}
 
 		// cut ctrl + x
 		if rl.IsKeyPressed(rl.KeyX) && ctrlDown() {
 			if r.cursor_pos > r.selection_pos {
-				rl.SetClipboardText(r.text[r.selection_pos:r.cursor_pos])
-				r.text = r.text[:r.selection_pos] + r.text[r.cursor_pos:]
+				rl.SetClipboardText(r.Text[r.selection_pos:r.cursor_pos])
+				r.Text = r.Text[:r.selection_pos] + r.Text[r.cursor_pos:]
 				r.cursor_pos = r.selection_pos
 			} else if r.cursor_pos < r.selection_pos {
-				rl.SetClipboardText(r.text[r.cursor_pos:r.selection_pos])
-				r.text = r.text[:r.cursor_pos] + r.text[r.selection_pos:]
+				rl.SetClipboardText(r.Text[r.cursor_pos:r.selection_pos])
+				r.Text = r.Text[:r.cursor_pos] + r.Text[r.selection_pos:]
 				r.selection_pos = r.cursor_pos
 			}
 		}
