@@ -2,7 +2,6 @@ package elements
 
 import (
 	"github.com/RustingRobot/light-ledger/ui"
-
 	rl "github.com/gen2brain/raylib-go/raylib"
 )
 

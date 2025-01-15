@@ -2,23 +2,23 @@ package ui
 
 import rl "github.com/gen2brain/raylib-go/raylib"
 
-type uiElement interface {
+type UiElement interface {
 	Draw(ctx *UiBundle)
 	Update(ctx *UiBundle)
 }
 
 type UiBundle struct {
 	Text_renderer TextRenderer
-	Ui_elements   []uiElement
-	Selected      uiElement
+	ui_elements   []UiElement
+	Selected      UiElement
 }
 
-func (r *UiBundle) Add(u uiElement) {
-	r.Ui_elements = append(r.Ui_elements, u)
+func (r *UiBundle) Add(u UiElement) {
+	r.ui_elements = append(r.ui_elements, u)
 }
 
 func (r *UiBundle) Draw() {
-	for _, ui_element := range r.Ui_elements {
+	for _, ui_element := range r.ui_elements {
 		ui_element.Draw(r)
 	}
 }
@@ -28,14 +28,13 @@ func (r *UiBundle) Update() {
 		r.Selected = nil
 	}
 
-	for _, ui_element := range r.Ui_elements {
+	for _, ui_element := range r.ui_elements {
 		ui_element.Update(r)
 	}
 }
 
-func SetupBundle() UiBundle {
-	out := UiBundle{Text_renderer: getTextRenderer()}
-	return out
+func NewBundle() *UiBundle {
+	return &UiBundle{Text_renderer: getTextRenderer()}
 }
 
 func (r *UiBundle) MeasureText(text string) rl.Vector2 {
