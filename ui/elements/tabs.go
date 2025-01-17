@@ -6,38 +6,40 @@ import (
 )
 
 type Tabs struct {
-	x, y         int32
-	height       int32
-	titles       []string
-	tab_elements []*Container
-	color        rl.Color
-	hovered      int32
-	selected     int32
+	x, y              int32
+	height, tab_width int32
+	titles            []string
+	tab_elements      []*Container
+	color             rl.Color
+	hovered           int32
+	selected          int32
 }
 
-func NewTabs(X int32, Y int32, height int32, titles []string, tab_elements []*Container, color rl.Color) *Tabs {
+func NewTabs(X int32, Y int32, height int32, tab_width int32, titles []string, tab_elements []*Container, color rl.Color) *Tabs {
 	for i, tab := range tab_elements {
 		if i != 0 {
 			tab.Active = false
 		}
 	}
-	return &Tabs{x: X, y: Y, height: height, titles: titles, tab_elements: tab_elements, color: color}
+	return &Tabs{x: X, y: Y, height: height, tab_width: tab_width, titles: titles, tab_elements: tab_elements, color: color}
 }
 
 func (r *Tabs) Draw(ctx *ui.UiBundle) {
 	if r.hovered >= 0 {
-		rl.DrawRectangle(r.x+100*r.hovered, r.y, int32(ctx.MeasureText(r.titles[r.hovered]).X), r.height, r.color)
+		rl.DrawRectangle(r.x+r.tab_width*r.hovered, r.y, r.tab_width, r.height, rl.Color{R: r.color.R, G: r.color.G, B: r.color.B, A: r.color.A / 5})
+	}
+	if r.selected >= 0 {
+		rl.DrawRectangle(r.x+r.tab_width*r.selected, r.y+r.height, r.tab_width, 2, rl.Red)
 	}
 	for i, title := range r.titles {
-		ctx.Text_renderer.DrawText(title, r.x+int32(100*i), r.y, r.color)
+		ctx.Text_renderer.DrawText(title, r.x+r.tab_width*int32(i), r.y, r.color)
 	}
 }
 
 func (r *Tabs) Update(ctx *ui.UiBundle) {
 	r.hovered = -1
-	for i, title := range r.titles {
-		text_width := ctx.MeasureText(title).X
-		if rl.CheckCollisionPointRec(rl.GetMousePosition(), rl.Rectangle{X: float32(r.x + int32(100*i)), Y: float32(r.y), Width: text_width, Height: float32(r.height)}) {
+	for i, _ := range r.titles {
+		if rl.CheckCollisionPointRec(rl.GetMousePosition(), rl.Rectangle{X: float32(r.x + r.tab_width*int32(i)), Y: float32(r.y), Width: float32(r.tab_width), Height: float32(r.height)}) {
 			r.hovered = int32(i)
 			if rl.IsMouseButtonPressed(rl.MouseButtonLeft) {
 				r.tab_elements[r.selected].Active = false
