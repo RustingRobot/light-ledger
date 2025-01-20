@@ -49,7 +49,6 @@ func main() {
 var data = `{"expenses":{"desc":[],"cost":[]}}`
 
 func saveToFile(desc string, cost string, tab *e.Container) {
-	tab.Active = !tab.Active
 	data, _ = sjson.Set(data, "expenses.desc.-1", desc)
 	data, _ = sjson.Set(data, "expenses.cost.-1", cost)
 	fmt.Println(data)

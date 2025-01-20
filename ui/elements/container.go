@@ -31,6 +31,6 @@ func (r *Container) Update(ctx *ui.UiBundle) {
 		return
 	}
 	for _, ui_element := range r.ui_elements {
-		ui_element.Draw(ctx)
+		ui_element.Update(ctx)
 	}
 }
