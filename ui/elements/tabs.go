@@ -32,7 +32,7 @@ func (r *Tabs) Draw(ctx *ui.UiBundle) {
 		rl.DrawRectangle(r.x+r.tab_width*r.selected, r.y+r.height, r.tab_width, 2, rl.Red)
 	}
 	for i, title := range r.titles {
-		ctx.Text_renderer.DrawText(title, r.x+r.tab_width*int32(i), r.y, r.color)
+		ctx.Text_renderer.DrawText(title, r.x+r.tab_width*int32(i)+10, r.y, r.color)
 	}
 }
 
