@@ -25,6 +25,8 @@ func main() {
 	} else {
 		data = string(content)
 	}
+	path, _ := os.Getwd()
+	db_location := path + "/db.json"
 
 	rl.SetConfigFlags(rl.FlagWindowResizable)
 	rl.InitWindow(900, 450, "Light Ledger")
@@ -41,8 +43,9 @@ func main() {
 	costButton := e.NewTextBox(410, 200, 100, 28, "cost", rl.White)
 	tabs := e.NewTabs(10, 50, 28, 150, []string{"add value", "data table", "calendar", "visualization"}, []*e.Container{tab1, tab2, tab3, tab4}, rl.White)
 	tab1.Add(e.NewButton(520, 200, 300, 28, "add", rl.White, func() { saveToFile(descButton.Text, costButton.Text, tab1) }))
-	root.Add(e.NewButton(10, 5, 200, 28, "change database", rl.White, func() { fmt.Println("test") }))
-	root.Add(e.NewText(220, 5, "../..", rl.LightGray))
+	dirText := e.NewText(180, 5, db_location, rl.Gray)
+	root.Add(dirText)
+	root.Add(e.NewText(5, 5, "current database:", rl.LightGray))
 	tab1.Add(descButton)
 	tab1.Add(costButton)
 	root.Add(tabs)
@@ -57,6 +60,10 @@ func main() {
 	for !rl.WindowShouldClose() {
 		rl.BeginDrawing()
 		rl.ClearBackground(rl.DarkGray)
+		if rl.IsFileDropped() {
+			dirText.SetText(rl.LoadDroppedFiles()[0])
+		}
+
 		root.Draw()
 		root.Update()
 		rl.EndDrawing()
