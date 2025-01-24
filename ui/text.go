@@ -19,9 +19,10 @@ type TextRenderer struct {
 }
 
 func (t TextRenderer) DrawText(text string, x, y int32, color rl.Color) {
-	rl.BeginShaderMode(t.Shader)
-	rl.DrawTextEx(t.Font, text, rl.Vector2{X: float32(x), Y: float32(y)}, float32(t.Font.BaseSize)/8, 1, color)
-	rl.EndShaderMode()
+	//rl.BeginShaderMode(t.Shader)
+	/* rl.DrawTextEx(t.Font, text, rl.Vector2{X: float32(x), Y: float32(y)}, float32(t.Font.BaseSize)/8, 1, color) */
+	rl.DrawText(text, x, y, 20, color)
+	//rl.EndShaderMode()
 }
 
 func getTextRenderer() TextRenderer {

@@ -43,7 +43,7 @@ func main() {
 	costButton := e.NewTextBox(410, 200, 100, 28, "cost", rl.White)
 	tabs := e.NewTabs(10, 50, 28, 150, []string{"add value", "data table", "calendar", "visualization"}, []*e.Container{tab1, tab2, tab3, tab4}, rl.White)
 	tab1.Add(e.NewButton(520, 200, 300, 28, "add", rl.White, func() { saveToFile(descButton.Text, costButton.Text, tab1) }))
-	dirText := e.NewText(180, 5, db_location, rl.Gray)
+	dirText := e.NewText(200, 5, db_location, rl.Gray)
 	root.Add(dirText)
 	root.Add(e.NewText(5, 5, "current database:", rl.LightGray))
 	tab1.Add(descButton)

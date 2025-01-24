@@ -57,9 +57,9 @@ func (r *TextBox) Draw(ctx *ui.UiBundle) {
 	}
 
 	if r.Text == "" {
-		ctx.Text_renderer.DrawText(r.placeholder_text, r.x+10, r.y, rl.Color{R: r.color.R, G: r.color.G, B: r.color.B, A: r.color.A / 5})
+		ctx.Text_renderer.DrawText(r.placeholder_text, r.x+10, r.y+4, rl.Color{R: r.color.R, G: r.color.G, B: r.color.B, A: r.color.A / 5})
 	} else {
-		ctx.Text_renderer.DrawText(r.Text, r.x+10, r.y, r.color)
+		ctx.Text_renderer.DrawText(r.Text, r.x+10, r.y+4, r.color)
 	}
 	rl.EndScissorMode()
 }
