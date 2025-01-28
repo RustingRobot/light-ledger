@@ -2,6 +2,7 @@ package elements
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 
 	"github.com/RustingRobot/light-ledger/data"
@@ -25,11 +26,12 @@ func (r *Table) Draw(ctx *ui.UiBundle) {
 	if err != nil {
 		log.Fatal(err)
 	}
+	ctx.RemoveLabeled("table")
 	for index, entry := range data.Expenses.Description {
-		ctx.Text_renderer.DrawText(entry, r.x, r.y+22*int32(index), r.color)
-		ctx.Text_renderer.DrawText(data.Expenses.Cost[index], r.x+200, r.y+22*int32(index), r.color)
+		ctx.Text_renderer.DrawText(entry, r.x+40, r.y+22*int32(index), r.color)
+		ctx.Text_renderer.DrawText(data.Expenses.Cost[index], r.x+240, r.y+22*int32(index), r.color)
+		ctx.AddLabeled(NewButton(r.x, r.y+22*int32(index), 20, 20, "X", rl.White, func() { fmt.Println(entry) }), "table")
 	}
-
 }
 
 func (r *Table) Update(ctx *ui.UiBundle) {}
