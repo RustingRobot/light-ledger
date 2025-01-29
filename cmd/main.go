@@ -64,8 +64,8 @@ func main() {
 			dirText.SetText(rl.LoadDroppedFiles()[0])
 		}
 
-		root.Draw()
 		root.Update()
+		root.Draw()
 		rl.EndDrawing()
 	}
 }
