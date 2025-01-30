@@ -4,14 +4,10 @@ go 1.22.0
 
 toolchain go1.23.4
 
-require github.com/gen2brain/raylib-go/raylib v0.0.0-20241207114308-a9ad86d5018c
+require github.com/gen2brain/raylib-go/raylib v0.0.0-20250109172833-6dbba4f81a9b
 
 require (
-	github.com/ebitengine/purego v0.8.1 // indirect
-	github.com/tidwall/gjson v1.18.0 // indirect
-	github.com/tidwall/match v1.1.1 // indirect
-	github.com/tidwall/pretty v1.2.1 // indirect
-	github.com/tidwall/sjson v1.2.5 // indirect
-	golang.org/x/exp v0.0.0-20241210194714-1829a127f884 // indirect
-	golang.org/x/sys v0.28.0 // indirect
+	github.com/ebitengine/purego v0.8.2 // indirect
+	golang.org/x/exp v0.0.0-20250128182459-e0ece0dbea4c // indirect
+	golang.org/x/sys v0.29.0 // indirect
 )

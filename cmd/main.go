@@ -2,28 +2,29 @@ package main
 
 import (
 	_ "embed"
+	"encoding/json"
 	"fmt"
 	"os"
 
+	d "github.com/RustingRobot/light-ledger/data"
 	"github.com/RustingRobot/light-ledger/ui"
 	e "github.com/RustingRobot/light-ledger/ui/elements"
 	rl "github.com/gen2brain/raylib-go/raylib"
-	"github.com/tidwall/sjson"
 )
 
 var data = ""
+var true_data d.Data = d.Data{}
 
 func main() {
 	if content, err := os.ReadFile("db.json"); err != nil {
 		if os.IsNotExist(err) {
 			if err := os.WriteFile("db.json", []byte(`{"expenses":{"desc":[],"cost":[]}}`), 0666); err != nil {
 				fmt.Println("ERROR")
-			} else {
-				data = `{"expenses":{"desc":[],"cost":[]}}`
 			}
 		}
 	} else {
-		data = string(content)
+		json.Unmarshal(content, &true_data)
+		//data = string(content)
 	}
 	path, _ := os.Getwd()
 	db_location := path + "/db.json"
@@ -42,7 +43,7 @@ func main() {
 	descButton := e.NewTextBox(100, 200, 300, 28, "description", rl.White)
 	costButton := e.NewTextBox(410, 200, 100, 28, "cost", rl.White)
 	tabs := e.NewTabs(10, 50, 28, 150, []string{"add value", "data table", "calendar", "visualization"}, []*e.Container{addTab, tableTab, calendarTab, visualizeTab}, rl.White)
-	addTab.Add(e.NewButton(520, 200, 300, 28, "add", rl.White, func() { saveToFile(descButton.Text, costButton.Text, addTab) }))
+	addTab.Add(e.NewButton(520, 200, 300, 28, "add", rl.White, func() { addEntry(descButton.Text, costButton.Text) }))
 	dirText := e.NewText(200, 5, db_location, rl.Gray)
 	root.Add(dirText)
 	root.Add(e.NewText(5, 5, "current database:", rl.LightGray))
@@ -51,7 +52,7 @@ func main() {
 	root.Add(tabs)
 
 	addTab.Add(e.NewText(100, 100, "This is tab 1", rl.White))
-	tableTab.Add(e.NewTable(100, 100, &data, rl.White))
+	tableTab.Add(e.NewTable(100, 100, &true_data, rl.White))
 	calendarTab.Add(e.NewText(100, 100, "This is tab 3", rl.White))
 	root.Add(addTab)
 	root.Add(tableTab)
@@ -70,12 +71,8 @@ func main() {
 	}
 }
 
-func saveToFile(desc string, cost string, tab *e.Container) {
-	data, _ = sjson.Set(data, "expenses.desc.-1", desc)
-	data, _ = sjson.Set(data, "expenses.cost.-1", cost)
-	fmt.Println(data)
-
-	if err := os.WriteFile("db.json", []byte(data), 0666); err != nil {
-		fmt.Println("ERROR")
-	}
+func addEntry(desc string, cost string) {
+	true_data.Expenses.Cost = append(true_data.Expenses.Cost, cost)
+	true_data.Expenses.Description = append(true_data.Expenses.Description, desc)
+	d.SaveToFile(true_data)
 }
