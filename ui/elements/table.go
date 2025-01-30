@@ -27,20 +27,26 @@ func (r *Table) Draw(ctx *ui.UiBundle) {
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	r.buttons = nil
 	for index, entry := range data.Expenses.Description {
 		ctx.Text_renderer.DrawText(entry, r.x+40, r.y+22*int32(index), r.color)
 		ctx.Text_renderer.DrawText(data.Expenses.Cost[index], r.x+240, r.y+22*int32(index), r.color)
-		btn := NewButton(r.x, r.y+22*int32(index), 20, 20, "X", rl.White, func() { fmt.Println(entry) })
-		r.buttons = append(r.buttons, btn)
-		btn.Draw(ctx)
-
 	}
+
+	for _, btn := range r.buttons {
+		btn.Draw(ctx)
+	}
+	r.buttons = nil
 }
 
 func (r *Table) Update(ctx *ui.UiBundle) {
-	for _, btn := range r.buttons {
+	var data data.Data
+	err := json.Unmarshal([]byte(*r.data), &data)
+	if err != nil {
+		log.Fatal(err)
+	}
+	for index, entry := range data.Expenses.Description {
+		btn := NewButton(r.x, r.y+22*int32(index), 20, 20, "X", rl.White, func() { fmt.Println(entry) })
+		r.buttons = append(r.buttons, btn)
 		btn.Update(ctx)
 	}
 }
