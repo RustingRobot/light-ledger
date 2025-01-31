@@ -20,6 +20,9 @@ func NewTable(X int32, Y int32, data *data.Data, color rl.Color) *Table {
 
 func (r *Table) Draw(ctx *ui.UiBundle) {
 	for index, entry := range r.data.Expenses.Description {
+		if index%2 == 0 {
+			rl.DrawRectangle(r.x, r.y+22*int32(index), 500, 20, rl.Gray)
+		}
 		ctx.Text_renderer.DrawText(entry, r.x+40, r.y+22*int32(index), r.color)
 		ctx.Text_renderer.DrawText(r.data.Expenses.Cost[index], r.x+240, r.y+22*int32(index), r.color)
 	}
