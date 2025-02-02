@@ -17,11 +17,7 @@ var true_data d.Data = d.Data{}
 
 func main() {
 	if content, err := os.ReadFile("db.json"); err != nil {
-		if os.IsNotExist(err) {
-			if err := os.WriteFile("db.json", []byte(`{"expenses":{"desc":[],"cost":[]}}`), 0666); err != nil {
-				fmt.Println("ERROR")
-			}
-		}
+		fmt.Println("ERROR")
 	} else {
 		json.Unmarshal(content, &true_data)
 		//data = string(content)
@@ -52,7 +48,7 @@ func main() {
 	root.Add(tabs)
 
 	addTab.Add(e.NewText(100, 100, "This is tab 1", rl.White))
-	tableTab.Add(e.NewTable(100, 100, &true_data, rl.White))
+	tableTab.Add(e.NewTable(10, 100, &true_data, rl.White))
 	calendarTab.Add(e.NewText(100, 100, "This is tab 3", rl.White))
 	root.Add(addTab)
 	root.Add(tableTab)
