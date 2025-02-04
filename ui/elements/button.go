@@ -12,6 +12,7 @@ type Button struct {
 	text          string
 	color         rl.Color
 	hovered       bool
+	Y_offset      int32
 }
 
 func NewButton(X int32, Y int32, Width int32, Height int32, Text string, Color rl.Color, On_click func()) *Button {
@@ -25,7 +26,7 @@ func (r *Button) Draw(ctx *ui.UiBundle) {
 	}
 
 	text_size := rl.MeasureTextEx(ctx.Text_renderer.Font, r.text, ctx.Text_renderer.Size, 1)
-	ctx.Text_renderer.DrawText(r.text, int32(float32(r.x)+float32(r.width/2)-float32(text_size.X/2)), int32(float32(r.y)+float32(r.height/2)-float32(text_size.Y/2)+4), r.color)
+	ctx.Text_renderer.DrawText(r.text, int32(float32(r.x)+float32(r.width/2)-float32(text_size.X/2)), int32(float32(r.y)+float32(r.height/2)-float32(text_size.Y/2)+4)+r.Y_offset, r.color)
 }
 
 func (r *Button) Update(ctx *ui.UiBundle) {
