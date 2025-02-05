@@ -8,6 +8,7 @@ import (
 
 type Data struct {
 	Expenses expenses `json:"expenses"`
+	Tags     []string `json:"tags"`
 }
 
 type expenses struct {

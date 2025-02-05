@@ -23,7 +23,7 @@ func NewTable(X int32, Y int32, data *data.Data, color rl.Color) *Table {
 func (r *Table) Draw(ctx *ui.UiBundle) {
 	ctx.Text_renderer.DrawText("description", r.x+40, r.y, r.color)
 	ctx.Text_renderer.DrawText("cost", r.x+440, r.y, r.color)
-	ctx.Text_renderer.DrawText("time", r.x+540, r.y, r.color)
+	ctx.Text_renderer.DrawText("date", r.x+540, r.y, r.color)
 
 	for index, entry := range r.data.Expenses.Description {
 		if index%2 != 0 {

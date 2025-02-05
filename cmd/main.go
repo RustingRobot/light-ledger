@@ -3,6 +3,7 @@ package main
 import (
 	_ "embed"
 	"encoding/json"
+	"fmt"
 	"os"
 	"time"
 
@@ -38,7 +39,9 @@ func main() {
 	visualizeTab := e.NewContainer()
 	descTextbox := e.NewTextBox(100, 200, 300, 28, "description", rl.White)
 	costTextbox := e.NewTextBox(410, 200, 100, 28, "cost", rl.White)
-	dateTextbox := e.NewTextBox(100, 238, 200, 28, "", rl.White)
+	dateTextbox := e.NewTextBox(330, 238, 180, 28, "", rl.White)
+	useCurrentTimeBox := e.NewCheckbox(100, 238, "use current date", rl.White)
+	useCurrentTimeBox.Checked = true
 
 	tabs := e.NewTabs(10, 50, 28, 150, []string{"add value", "data table", "calendar", "visualization"}, []*e.Container{addTab, tableTab, calendarTab, visualizeTab}, rl.White)
 	addTab.Add(e.NewButton(520, 200, 300, 28, "add", rl.White, func() { addEntry(descTextbox.Text, costTextbox.Text) }))
@@ -48,9 +51,9 @@ func main() {
 	addTab.Add(descTextbox)
 	addTab.Add(costTextbox)
 	addTab.Add(dateTextbox)
+	addTab.Add(useCurrentTimeBox)
 	root.Add(tabs)
 
-	addTab.Add(e.NewText(100, 100, "This is tab 1", rl.White))
 	tableTab.Add(e.NewTable(10, 100, &true_data, rl.White))
 	calendarTab.Add(e.NewText(100, 100, "This is tab 3", rl.White))
 	root.Add(addTab)
@@ -65,7 +68,7 @@ func main() {
 			dirText.SetText(rl.LoadDroppedFiles()[0])
 		}
 		t := time.Now()
-		dateTextbox.Text = t.Format(time.Stamp)
+		dateTextbox.Text = fmt.Sprintf("%d-%02d-%02d", t.Year(), t.Month(), t.Day())
 
 		root.Update()
 		root.Draw()
