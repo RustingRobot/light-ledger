@@ -37,21 +37,23 @@ func main() {
 	tableTab := e.NewContainer()
 	calendarTab := e.NewContainer()
 	visualizeTab := e.NewContainer()
-	descTextbox := e.NewTextBox(100, 200, 300, 28, "description", rl.White)
-	costTextbox := e.NewTextBox(410, 200, 100, 28, "cost", rl.White)
-	dateTextbox := e.NewTextBox(330, 238, 180, 28, "", rl.White)
-	useCurrentTimeBox := e.NewCheckbox(100, 238, "use current date", rl.White)
-	useCurrentTimeBox.Checked = true
+	descTextbox := e.NewTextBox(10, 100, 400, 28, "description", rl.White)
+	costTextbox := e.NewTextBox(420, 100, 90, 28, "cost", rl.White)
+	dateTextbox := e.NewTextBox(520, 100, 135, 28, "", rl.White)
+	t := time.Now()
+	dateTextbox.Text = fmt.Sprintf("%d-%02d-%02d", t.Year(), t.Month(), t.Day())
+	/* 	useCurrentTimeBox := e.NewCheckbox(100, 238, "use current date", rl.White)
+	   	useCurrentTimeBox.Checked = true */
 
 	tabs := e.NewTabs(10, 50, 28, 150, []string{"add value", "data table", "calendar", "visualization"}, []*e.Container{addTab, tableTab, calendarTab, visualizeTab}, rl.White)
-	addTab.Add(e.NewButton(520, 200, 300, 28, "add", rl.White, func() { addEntry(descTextbox.Text, costTextbox.Text) }))
-	dirText := e.NewText(200, 5, db_location, rl.Gray)
+	addTab.Add(e.NewButton(10, 176, 300, 28, "add", rl.White, func() { addEntry(descTextbox, costTextbox) }))
+	dirText := e.NewText(200, 10, db_location, rl.Gray)
 	root.Add(dirText)
-	root.Add(e.NewText(5, 5, "current database:", rl.LightGray))
+	root.Add(e.NewText(5, 10, "current database:", rl.LightGray))
 	addTab.Add(descTextbox)
 	addTab.Add(costTextbox)
 	addTab.Add(dateTextbox)
-	addTab.Add(useCurrentTimeBox)
+	addTab.Add(e.NewTagManager(10, 138, 200, 28, rl.White))
 	root.Add(tabs)
 
 	tableTab.Add(e.NewTable(10, 100, &true_data, rl.White))
@@ -67,8 +69,6 @@ func main() {
 		if rl.IsFileDropped() {
 			dirText.SetText(rl.LoadDroppedFiles()[0])
 		}
-		t := time.Now()
-		dateTextbox.Text = fmt.Sprintf("%d-%02d-%02d", t.Year(), t.Month(), t.Day())
 
 		root.Update()
 		root.Draw()
@@ -76,8 +76,10 @@ func main() {
 	}
 }
 
-func addEntry(desc string, cost string) {
-	true_data.Expenses.Cost = append(true_data.Expenses.Cost, cost)
-	true_data.Expenses.Description = append(true_data.Expenses.Description, desc)
+func addEntry(desc *e.TextBox, cost *e.TextBox) {
+	true_data.Expenses.Cost = append(true_data.Expenses.Cost, cost.Text)
+	true_data.Expenses.Description = append(true_data.Expenses.Description, desc.Text)
+	desc.ClearText()
+	cost.ClearText()
 	d.SaveToFile(true_data)
 }

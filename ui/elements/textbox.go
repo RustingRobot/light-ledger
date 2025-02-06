@@ -23,6 +23,12 @@ func NewTextBox(X int32, Y int32, Width int32, Height int32, Placeholder_text st
 	return &TextBox{x: X, y: Y, width: Width, height: Height, placeholder_text: Placeholder_text, color: Color, cursor_pos: 0}
 }
 
+func (r *TextBox) ClearText() {
+	r.Text = ""
+	r.cursor_pos = 0
+	r.selection_pos = 0
+}
+
 func (r *TextBox) Draw(ctx *ui.UiBundle) {
 	rl.BeginScissorMode(r.x, r.y, r.width, r.height)
 	temp_color := r.color
