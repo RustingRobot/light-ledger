@@ -9,14 +9,15 @@ import (
 )
 
 type TextBox struct {
-	x, y             int32
-	width, height    int32
-	placeholder_text string
-	Text             string
-	color            rl.Color
-	hovered          bool
-	cursor_pos       int
-	selection_pos    int
+	x, y                 int32
+	width, height        int32
+	placeholder_text     string
+	Text                 string
+	color                rl.Color
+	hovered              bool
+	cursor_pos           int
+	selection_pos        int
+	Enter_func, Tab_func func()
 }
 
 func NewTextBox(X int32, Y int32, Width int32, Height int32, Placeholder_text string, Color rl.Color) *TextBox {
@@ -223,6 +224,14 @@ func (r *TextBox) Update(ctx *ui.UiBundle) {
 				r.Text = r.Text[:r.cursor_pos] + r.Text[r.selection_pos:]
 				r.selection_pos = r.cursor_pos
 			}
+		}
+
+		if rl.IsKeyPressed(rl.KeyTab) && r.Tab_func != nil {
+			r.Tab_func()
+		}
+
+		if rl.IsKeyPressed(rl.KeyEnter) && r.Enter_func != nil {
+			r.Enter_func()
 		}
 	}
 }
