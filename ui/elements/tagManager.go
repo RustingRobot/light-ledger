@@ -13,7 +13,8 @@ type TagManager struct {
 	color               rl.Color
 	input               *TextBox
 	add                 *Button
-	addedTags           []string
+	added_tags          []string
+	hovered_tag         int
 }
 
 func NewTagManager(X, Y, width, height int32, color rl.Color) *TagManager {
@@ -28,24 +29,35 @@ func (r *TagManager) addTag() {
 	if strings.Trim(r.input.Text, " ") == "" {
 		return
 	}
-	r.addedTags = append(r.addedTags, strings.Trim(r.input.Text, " "))
+	r.added_tags = append(r.added_tags, strings.Trim(r.input.Text, " "))
 	r.input.ClearText()
-	fmt.Println(r.addedTags)
+	fmt.Println(r.added_tags)
 }
 
 func (r *TagManager) Draw(ctx *ui.UiBundle) {
 	r.input.Draw(ctx)
 	r.add.Draw(ctx)
 	cur_x_pos := int32(5)
-	for _, e := range r.addedTags {
+	r.hovered_tag = -1
+	for i, e := range r.added_tags {
 		txt_width := int32(ctx.MeasureText(e).X)
-		rl.DrawRectangle(r.x+r.width+cur_x_pos+6, r.y, txt_width+8, 28, rl.Gray)
+		color := rl.Gray
+		// nasty update in draw function
+		if rl.CheckCollisionPointRec(rl.GetMousePosition(), rl.Rectangle{X: float32(r.x + r.width + cur_x_pos + 6), Y: float32(r.y), Width: float32(txt_width + 8), Height: float32(28)}) {
+			color = rl.White
+			r.hovered_tag = i
+		}
+
+		rl.DrawRectangle(r.x+r.width+cur_x_pos+6, r.y, txt_width+8, 28, color)
 		ctx.Text_renderer.DrawText(e, r.x+r.width+cur_x_pos+10, r.y+5, rl.DarkGray)
 		cur_x_pos += txt_width + 14
 	}
 }
 
 func (r *TagManager) Update(ctx *ui.UiBundle) {
+	if r.hovered_tag >= 0 && rl.IsMouseButtonPressed(rl.MouseButtonLeft) {
+		r.added_tags = append(r.added_tags[:r.hovered_tag], r.added_tags[r.hovered_tag+1:]...)
+	}
 	r.input.Update(ctx)
 	r.add.Update(ctx)
 }
