@@ -46,7 +46,7 @@ func main() {
 	   	useCurrentTimeBox.Checked = true */
 
 	tabs := e.NewTabs(10, 50, 28, 150, []string{"add value", "data table", "calendar", "visualization"}, []*e.Container{addTab, tableTab, calendarTab, visualizeTab}, rl.White)
-	addTab.Add(e.NewButton(10, 176, 300, 28, "add", rl.White, func() { addEntry(descTextbox, costTextbox) }))
+	addTab.Add(e.NewButton(10, 176, 300, 28, "add", rl.White, func() { addEntry(descTextbox, costTextbox, dateTextbox) }))
 	dirText := e.NewText(200, 10, db_location, rl.Gray)
 	root.Add(dirText)
 	root.Add(e.NewText(5, 10, "current database:", rl.LightGray))
@@ -76,9 +76,10 @@ func main() {
 	}
 }
 
-func addEntry(desc *e.TextBox, cost *e.TextBox) {
+func addEntry(desc *e.TextBox, cost *e.TextBox, date *e.TextBox) {
 	true_data.Expenses.Cost = append(true_data.Expenses.Cost, cost.Text)
 	true_data.Expenses.Description = append(true_data.Expenses.Description, desc.Text)
+	true_data.Expenses.Date = append(true_data.Expenses.Date, date.Text)
 	desc.ClearText()
 	cost.ClearText()
 	d.SaveToFile(true_data)

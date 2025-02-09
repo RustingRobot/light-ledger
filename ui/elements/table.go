@@ -31,6 +31,7 @@ func (r *Table) Draw(ctx *ui.UiBundle) {
 		}
 		ctx.Text_renderer.DrawText(entry, r.x+40, r.y+22*int32(index+1)+5, r.color)
 		ctx.Text_renderer.DrawText(r.data.Expenses.Cost[index], r.x+440, r.y+22*int32(index+1)+5, r.color)
+		ctx.Text_renderer.DrawText(r.data.Expenses.Date[index], r.x+540, r.y+22*int32(index+1)+5, r.color)
 	}
 	rl.DrawRectangle(r.x, r.y+22, 800, 2, rl.Red)
 	for _, btn := range r.buttons {
@@ -51,5 +52,6 @@ func (r *Table) Update(ctx *ui.UiBundle) {
 func (r *Table) deleteEntry(data *data.Data, index int) {
 	data.Expenses.Cost = append(data.Expenses.Cost[:index], data.Expenses.Cost[index+1:]...)
 	data.Expenses.Description = append(data.Expenses.Description[:index], data.Expenses.Description[index+1:]...)
+	data.Expenses.Date = append(data.Expenses.Date[:index], data.Expenses.Date[index+1:]...)
 	d.SaveToFile(*data)
 }
