@@ -53,5 +53,6 @@ func (r *Table) deleteEntry(data *data.Data, index int) {
 	data.Expenses.Cost = append(data.Expenses.Cost[:index], data.Expenses.Cost[index+1:]...)
 	data.Expenses.Description = append(data.Expenses.Description[:index], data.Expenses.Description[index+1:]...)
 	data.Expenses.Date = append(data.Expenses.Date[:index], data.Expenses.Date[index+1:]...)
+	data.Expenses.Tags = append(data.Expenses.Tags[:index], data.Expenses.Tags[index+1:]...)
 	d.SaveToFile(*data)
 }

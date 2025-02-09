@@ -1,7 +1,6 @@
 package elements
 
 import (
-	"fmt"
 	"strings"
 
 	"github.com/RustingRobot/light-ledger/ui"
@@ -25,13 +24,16 @@ func NewTagManager(X, Y, width, height int32, color rl.Color) *TagManager {
 	return tm
 }
 
+func (r *TagManager) GetTags() []string {
+	return r.added_tags
+}
+
 func (r *TagManager) addTag() {
 	if strings.Trim(r.input.Text, " ") == "" {
 		return
 	}
 	r.added_tags = append(r.added_tags, strings.Trim(r.input.Text, " "))
 	r.input.ClearText()
-	fmt.Println(r.added_tags)
 }
 
 func (r *TagManager) Draw(ctx *ui.UiBundle) {

@@ -12,9 +12,10 @@ type Data struct {
 }
 
 type expenses struct {
-	Description []string `json:"desc"`
-	Cost        []string `json:"cost"`
-	Date        []string `json:"date"`
+	Description []string   `json:"desc"`
+	Cost        []string   `json:"cost"`
+	Date        []string   `json:"date"`
+	Tags        [][]string `json:"tags"`
 }
 
 func SaveToFile(data Data) {

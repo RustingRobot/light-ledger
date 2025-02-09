@@ -46,14 +46,15 @@ func main() {
 	   	useCurrentTimeBox.Checked = true */
 
 	tabs := e.NewTabs(10, 50, 28, 150, []string{"add value", "data table", "calendar", "visualization"}, []*e.Container{addTab, tableTab, calendarTab, visualizeTab}, rl.White)
-	addTab.Add(e.NewButton(10, 176, 300, 28, "add", rl.White, func() { addEntry(descTextbox, costTextbox, dateTextbox) }))
 	dirText := e.NewText(200, 10, db_location, rl.Gray)
+	tagManager := e.NewTagManager(10, 138, 200, 28, rl.White)
 	root.Add(dirText)
 	root.Add(e.NewText(5, 10, "current database:", rl.LightGray))
 	addTab.Add(descTextbox)
 	addTab.Add(costTextbox)
 	addTab.Add(dateTextbox)
-	addTab.Add(e.NewTagManager(10, 138, 200, 28, rl.White))
+	addTab.Add(tagManager)
+	addTab.Add(e.NewButton(10, 176, 300, 28, "add", rl.White, func() { addEntry(descTextbox, costTextbox, dateTextbox, tagManager) }))
 	root.Add(tabs)
 
 	tableTab.Add(e.NewTable(10, 100, &true_data, rl.White))
@@ -76,10 +77,15 @@ func main() {
 	}
 }
 
-func addEntry(desc *e.TextBox, cost *e.TextBox, date *e.TextBox) {
+func addEntry(desc *e.TextBox, cost *e.TextBox, date *e.TextBox, tag_manager *e.TagManager) {
+	fmt.Println(true_data.Expenses.Tags)
 	true_data.Expenses.Cost = append(true_data.Expenses.Cost, cost.Text)
 	true_data.Expenses.Description = append(true_data.Expenses.Description, desc.Text)
 	true_data.Expenses.Date = append(true_data.Expenses.Date, date.Text)
+	new_tags := tag_manager.GetTags()
+	fmt.Println(true_data.Expenses.Tags)
+	true_data.Expenses.Tags = append(true_data.Expenses.Tags, new_tags)
+	fmt.Println(true_data.Expenses.Tags)
 	desc.ClearText()
 	cost.ClearText()
 	d.SaveToFile(true_data)
