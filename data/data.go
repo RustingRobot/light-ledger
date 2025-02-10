@@ -6,7 +6,7 @@ import (
 	"os"
 )
 
-type Data struct {
+/* type Data struct {
 	Expenses expenses `json:"expenses"`
 	Tags     []string `json:"tags"`
 }
@@ -16,6 +16,18 @@ type expenses struct {
 	Cost        []string   `json:"cost"`
 	Date        []string   `json:"date"`
 	Tags        [][]string `json:"tags"`
+} */
+
+type Data struct {
+	Expenses []Entry  `json:"expenses"`
+	Tags     []string `json:"tags"`
+}
+
+type Entry struct {
+	Description string   `json:"desc"`
+	Cost        string   `json:"cost"`
+	Date        string   `json:"date"`
+	Tags        []string `json:"tags"`
 }
 
 func SaveToFile(data Data) {
