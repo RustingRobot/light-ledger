@@ -83,6 +83,7 @@ func addEntry(desc *e.TextBox, cost *e.TextBox, date *e.TextBox, tag_manager *e.
 	   	true_data.Expenses.Date = append(true_data.Expenses.Date, date.Text) */
 	new_entry := d.Entry{Cost: cost.Text, Description: desc.Text, Date: date.Text, Tags: tag_manager.GetTags()}
 	true_data.Expenses = append(true_data.Expenses, new_entry)
+	tag_manager.EmptyTags()
 	desc.ClearText()
 	cost.ClearText()
 	d.SaveToFile(true_data)

@@ -24,6 +24,7 @@ func (r *Table) Draw(ctx *ui.UiBundle) {
 	ctx.Text_renderer.DrawText("description", r.x+40, r.y, r.color)
 	ctx.Text_renderer.DrawText("cost", r.x+440, r.y, r.color)
 	ctx.Text_renderer.DrawText("date", r.x+540, r.y, r.color)
+	ctx.Text_renderer.DrawText("tags", r.x+680, r.y, r.color)
 
 	for index, entry := range r.data.Expenses {
 		if index%2 != 0 {
@@ -32,6 +33,22 @@ func (r *Table) Draw(ctx *ui.UiBundle) {
 		ctx.Text_renderer.DrawText(entry.Description, r.x+40, r.y+22*int32(index+1)+5, r.color)
 		ctx.Text_renderer.DrawText(entry.Cost, r.x+440, r.y+22*int32(index+1)+5, r.color)
 		ctx.Text_renderer.DrawText(entry.Date, r.x+540, r.y+22*int32(index+1)+5, r.color)
+
+		cur_x_pos := int32(5)
+		for _, e := range entry.Tags {
+			bg_color := rl.Gray
+			fg_color := rl.DarkGray
+
+			if index%2 != 0 {
+				bg_color = rl.DarkGray
+				fg_color = rl.Gray
+			}
+
+			txt_width := int32(ctx.MeasureText(e).X)
+			rl.DrawRectangle(cur_x_pos+r.x+680+6, r.y+22*int32(index+1)+5, txt_width+8, 20, bg_color)
+			ctx.Text_renderer.DrawText(e, cur_x_pos+r.x+680+10, r.y+22*int32(index+1)+5, fg_color)
+			cur_x_pos += txt_width + 14
+		}
 	}
 	rl.DrawRectangle(r.x, r.y+22, 800, 2, rl.Red)
 	for _, btn := range r.buttons {

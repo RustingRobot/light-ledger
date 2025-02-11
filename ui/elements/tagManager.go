@@ -24,6 +24,10 @@ func NewTagManager(X, Y, width, height int32, color rl.Color) *TagManager {
 	return tm
 }
 
+func (r *TagManager) EmptyTags() {
+	r.added_tags = nil
+}
+
 func (r *TagManager) GetTags() []string {
 	new_array := make([]string, len(r.added_tags))
 	copy(new_array, r.added_tags)
