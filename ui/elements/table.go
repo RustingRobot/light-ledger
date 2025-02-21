@@ -36,17 +36,9 @@ func (r *Table) Draw(ctx *ui.UiBundle) {
 
 		cur_x_pos := int32(5)
 		for _, e := range entry.Tags {
-			bg_color := rl.Gray
-			fg_color := rl.DarkGray
-
-			if index%2 != 0 {
-				bg_color = rl.DarkGray
-				fg_color = rl.Gray
-			}
-
 			txt_width := int32(ctx.MeasureText(e).X)
-			rl.DrawRectangle(cur_x_pos+r.x+680+6, r.y+22*int32(index+1)+5, txt_width+8, 20, bg_color)
-			ctx.Text_renderer.DrawText(e, cur_x_pos+r.x+680+10, r.y+22*int32(index+1)+5, fg_color)
+			rl.DrawRectangle(cur_x_pos+r.x+680+6, r.y+22*int32(index+1)+5, txt_width+8, 20, rl.White)
+			ctx.Text_renderer.DrawText(e, cur_x_pos+r.x+680+10, r.y+22*int32(index+1)+5, rl.DarkGray)
 			cur_x_pos += txt_width + 14
 		}
 	}
