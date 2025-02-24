@@ -18,6 +18,7 @@ var true_data d.Data = d.Data{}
 func main() {
 
 	if content, err := os.ReadFile("db.json"); err != nil {
+		true_data.Tags = make(map[string]int)
 		data, _ := json.Marshal(true_data)
 		os.WriteFile("db.json", data, 0666)
 	} else {
@@ -78,13 +79,10 @@ func main() {
 }
 
 func addEntry(desc *e.TextBox, cost *e.TextBox, date *e.TextBox, tag_manager *e.TagManager) {
-	/* 	true_data.Expenses.Cost = append(true_data.Expenses.Cost, cost.Text)
-	   	true_data.Expenses.Description = append(true_data.Expenses.Description, desc.Text)
-	   	true_data.Expenses.Date = append(true_data.Expenses.Date, date.Text) */
 	new_entry := d.Entry{Cost: cost.Text, Description: desc.Text, Date: date.Text, Tags: tag_manager.GetTags()}
 	true_data.Expenses = append(true_data.Expenses, new_entry)
 	tag_manager.EmptyTags()
 	desc.ClearText()
 	cost.ClearText()
-	d.SaveToFile(true_data)
+	d.SaveToFile(true_data, tag_manager.GetTags(), true)
 }

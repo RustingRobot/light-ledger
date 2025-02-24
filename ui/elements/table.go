@@ -60,5 +60,5 @@ func (r *Table) Update(ctx *ui.UiBundle) {
 
 func (r *Table) deleteEntry(data *data.Data, index int) {
 	data.Expenses = append(data.Expenses[:index], data.Expenses[index+1:]...)
-	d.SaveToFile(*data)
+	d.SaveToFile(*data, data.Expenses[index].Tags, false)
 }

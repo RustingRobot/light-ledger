@@ -3,6 +3,8 @@ package elements
 import (
 	"strings"
 
+	"slices"
+
 	"github.com/RustingRobot/light-ledger/ui"
 	rl "github.com/gen2brain/raylib-go/raylib"
 )
@@ -64,7 +66,7 @@ func (r *TagManager) Draw(ctx *ui.UiBundle) {
 
 func (r *TagManager) Update(ctx *ui.UiBundle) {
 	if r.hovered_tag >= 0 && rl.IsMouseButtonPressed(rl.MouseButtonLeft) {
-		r.added_tags = append(r.added_tags[:r.hovered_tag], r.added_tags[r.hovered_tag+1:]...)
+		r.added_tags = slices.Delete(r.added_tags, r.hovered_tag, r.hovered_tag+1)
 	}
 	r.input.Update(ctx)
 	r.add.Update(ctx)
