@@ -19,7 +19,9 @@ type Entry struct {
 }
 
 func SaveToFile(data Data, tags []string, adding bool) {
+	fmt.Println(tags)
 	for _, e := range tags {
+		fmt.Println(e)
 		if adding {
 			data.Tags[e] += 1
 		} else {
@@ -29,7 +31,7 @@ func SaveToFile(data Data, tags []string, adding bool) {
 			}
 		}
 	}
-
+	fmt.Println(data)
 	byte_data, _ := json.Marshal(data)
 	if err := os.WriteFile("db.json", []byte(byte_data), 0666); err != nil {
 		fmt.Println("couldn't save to file")

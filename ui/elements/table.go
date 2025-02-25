@@ -1,6 +1,8 @@
 package elements
 
 import (
+	"slices"
+
 	"github.com/RustingRobot/light-ledger/data"
 	d "github.com/RustingRobot/light-ledger/data"
 	"github.com/RustingRobot/light-ledger/ui"
@@ -59,6 +61,7 @@ func (r *Table) Update(ctx *ui.UiBundle) {
 }
 
 func (r *Table) deleteEntry(data *data.Data, index int) {
-	data.Expenses = append(data.Expenses[:index], data.Expenses[index+1:]...)
-	d.SaveToFile(*data, data.Expenses[index].Tags, false)
+	tags := data.Expenses[index].Tags
+	data.Expenses = slices.Delete(data.Expenses, index, index+1)
+	d.SaveToFile(*data, tags, false)
 }

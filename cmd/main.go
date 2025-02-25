@@ -79,10 +79,11 @@ func main() {
 }
 
 func addEntry(desc *e.TextBox, cost *e.TextBox, date *e.TextBox, tag_manager *e.TagManager) {
-	new_entry := d.Entry{Cost: cost.Text, Description: desc.Text, Date: date.Text, Tags: tag_manager.GetTags()}
+	tags := tag_manager.GetTags()
+	new_entry := d.Entry{Cost: cost.Text, Description: desc.Text, Date: date.Text, Tags: tags}
 	true_data.Expenses = append(true_data.Expenses, new_entry)
 	tag_manager.EmptyTags()
 	desc.ClearText()
 	cost.ClearText()
-	d.SaveToFile(true_data, tag_manager.GetTags(), true)
+	d.SaveToFile(true_data, tags, true)
 }

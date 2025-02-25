@@ -37,7 +37,7 @@ func (r *TagManager) GetTags() []string {
 }
 
 func (r *TagManager) addTag() {
-	if strings.Trim(r.input.Text, " ") == "" {
+	if strings.Trim(r.input.Text, " ") == "" || slices.Contains(r.added_tags, r.input.Text) {
 		return
 	}
 	r.added_tags = append(r.added_tags, strings.Trim(r.input.Text, " "))
