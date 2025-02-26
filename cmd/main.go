@@ -55,7 +55,8 @@ func main() {
 	addTab.Add(costTextbox)
 	addTab.Add(dateTextbox)
 	addTab.Add(tagManager)
-	addTab.Add(e.NewButton(10, 176, 300, 28, "add", rl.White, func() { addEntry(descTextbox, costTextbox, dateTextbox, tagManager) }))
+	addTab.Add(e.NewQuickTags(5, 176, rl.White, tagManager, &true_data))
+	addTab.Add(e.NewButton(10, 210, 300, 28, "add", rl.White, func() { addEntry(descTextbox, costTextbox, dateTextbox, tagManager) }))
 	root.Add(tabs)
 
 	tableTab.Add(e.NewTable(10, 100, &true_data, rl.White))
