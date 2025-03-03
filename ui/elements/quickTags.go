@@ -3,6 +3,7 @@ package elements
 import (
 	"slices"
 	"sort"
+	"strings"
 
 	"github.com/RustingRobot/light-ledger/data"
 	"github.com/RustingRobot/light-ledger/ui"
@@ -43,6 +44,9 @@ func (r *QuickTags) Draw(ctx *ui.UiBundle) {
 	})
 	r.hovered_tag = ""
 	for _, tag := range items {
+		if !strings.HasPrefix(tag.key, r.tag_manager.GetText()) {
+			continue
+		}
 		txt_width := int32(ctx.MeasureText(tag.key).X)
 		color := rl.Gray
 		// nasty update in draw function

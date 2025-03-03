@@ -26,6 +26,10 @@ func NewTagManager(X, Y, width, height int32, color rl.Color) *TagManager {
 	return tm
 }
 
+func (r *TagManager) GetText() string {
+	return r.input.Text
+}
+
 func (r *TagManager) EmptyTags() {
 	r.added_tags = nil
 }
