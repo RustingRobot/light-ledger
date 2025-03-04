@@ -1,8 +1,6 @@
 package ui
 
 import (
-	"fmt"
-
 	rl "github.com/gen2brain/raylib-go/raylib"
 )
 
@@ -25,12 +23,10 @@ func (r *UiBundle) Add(u UiElement) {
 func (r *UiBundle) AddLabeled(u UiElement, label string) {
 	r.ui_elements = append(r.ui_elements, u)
 	r.label[label] = append(r.label[label], len(r.ui_elements))
-	fmt.Printf("removing: %+v ", r.label)
 }
 
 func (r *UiBundle) RemoveLabeled(label string) {
 	for _, index := range r.label[label] {
-		fmt.Println("removing: ", index)
 		r.ui_elements[index] = r.ui_elements[len(r.ui_elements)-1]
 		r.ui_elements = r.ui_elements[:len(r.ui_elements)-1]
 		return

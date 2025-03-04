@@ -2,6 +2,7 @@ package elements
 
 import (
 	"slices"
+	"sort"
 
 	"github.com/RustingRobot/light-ledger/data"
 	d "github.com/RustingRobot/light-ledger/data"
@@ -27,6 +28,8 @@ func (r *Table) Draw(ctx *ui.UiBundle) {
 	ctx.Text_renderer.DrawText("cost", r.x+440, r.y, r.color)
 	ctx.Text_renderer.DrawText("date", r.x+540, r.y, r.color)
 	ctx.Text_renderer.DrawText("tags", r.x+680, r.y, r.color)
+
+	sort.Sort(*(r.data))
 
 	for index, entry := range r.data.Expenses {
 		if index%2 != 0 {
