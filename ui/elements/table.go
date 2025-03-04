@@ -1,8 +1,10 @@
 package elements
 
 import (
+	"fmt"
 	"slices"
 	"sort"
+	"time"
 
 	"github.com/RustingRobot/light-ledger/data"
 	d "github.com/RustingRobot/light-ledger/data"
@@ -31,21 +33,36 @@ func (r *Table) Draw(ctx *ui.UiBundle) {
 
 	sort.Sort(*(r.data))
 
+	y_offset := int32(27)
+	var month_tracker time.Month
+
 	for index, entry := range r.data.Expenses {
-		if index%2 != 0 {
-			rl.DrawRectangle(r.x, r.y+22*int32(index+1)+5, 800, 20, rl.Gray)
+		entry_date, err := time.Parse(time.DateOnly, entry.Date)
+		if err != nil {
+			fmt.Println("error")
 		}
-		ctx.Text_renderer.DrawText(entry.Description, r.x+40, r.y+22*int32(index+1)+5, r.color)
-		ctx.Text_renderer.DrawText(entry.Cost, r.x+440, r.y+22*int32(index+1)+5, r.color)
-		ctx.Text_renderer.DrawText(entry.Date, r.x+540, r.y+22*int32(index+1)+5, r.color)
+		if entry_date.Month() != month_tracker {
+			rl.DrawRectangle(r.x, r.y+y_offset, 800, 20, rl.White)
+			ctx.Text_renderer.DrawText(fmt.Sprint(entry_date.Year())+" "+entry_date.Month().String(), r.x+40, r.y+y_offset, rl.DarkGray)
+			month_tracker = entry_date.Month()
+			y_offset += 22
+		}
+
+		if index%2 != 0 {
+			rl.DrawRectangle(r.x, r.y+y_offset, 800, 20, rl.Gray)
+		}
+		ctx.Text_renderer.DrawText(entry.Description, r.x+40, r.y+y_offset, r.color)
+		ctx.Text_renderer.DrawText(entry.Cost, r.x+440, r.y+y_offset, r.color)
+		ctx.Text_renderer.DrawText(entry.Date, r.x+540, r.y+y_offset, r.color)
 
 		cur_x_pos := int32(5)
 		for _, e := range entry.Tags {
 			txt_width := int32(ctx.MeasureText(e).X)
-			rl.DrawRectangle(cur_x_pos+r.x+680+6, r.y+22*int32(index+1)+5, txt_width+8, 20, rl.White)
-			ctx.Text_renderer.DrawText(e, cur_x_pos+r.x+680+10, r.y+22*int32(index+1)+5, rl.DarkGray)
+			rl.DrawRectangle(cur_x_pos+r.x+680+6, r.y+y_offset, txt_width+8, 20, rl.White)
+			ctx.Text_renderer.DrawText(e, cur_x_pos+r.x+680+10, r.y+y_offset, rl.DarkGray)
 			cur_x_pos += txt_width + 14
 		}
+		y_offset += 22
 	}
 	rl.DrawRectangle(r.x, r.y+22, 800, 2, rl.Red)
 	for _, btn := range r.buttons {
@@ -55,11 +72,24 @@ func (r *Table) Draw(ctx *ui.UiBundle) {
 }
 
 func (r *Table) Update(ctx *ui.UiBundle) {
-	for index, _ := range r.data.Expenses {
-		btn := NewButton(r.x, r.y+22*int32(index+1)+5, 20, 20, "x", rl.White, func() { r.deleteEntry(r.data, index) })
+	y_offset := int32(27)
+	var month_tracker time.Month
+
+	for index, entry := range r.data.Expenses {
+		entry_date, err := time.Parse(time.DateOnly, entry.Date)
+		if err != nil {
+			fmt.Println("error")
+		}
+		if entry_date.Month() != month_tracker {
+			month_tracker = entry_date.Month()
+			y_offset += 22
+		}
+
+		btn := NewButton(r.x, r.y+y_offset, 20, 20, "x", rl.White, func() { r.deleteEntry(r.data, index) })
 		btn.Y_offset = -2
 		r.buttons = append(r.buttons, btn)
 		btn.Update(ctx)
+		y_offset += 22
 	}
 }
 
