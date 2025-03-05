@@ -57,7 +57,7 @@ func (r *TextBox) Draw(ctx *ui.UiBundle) {
 		rl.DrawLine(cursor_x, r.y+5, cursor_x, r.y+r.height-5, r.color)
 	}
 	// outline
-	rl.DrawRectangleLinesEx(rl.Rectangle{X: float32(r.x), Y: float32(r.y), Width: float32(r.width), Height: float32(r.height)}, 2.0, temp_color)
+	rl.DrawRectangleLinesEx(rl.Rectangle{X: float32(r.x), Y: float32(r.y), Width: float32(r.width), Height: float32(r.height)}, 1.0, temp_color)
 	if r.hovered {
 		// highlight
 		rl.DrawRectangle(r.x, r.y, r.width, r.height, rl.Color{R: r.color.R, G: r.color.G, B: r.color.B, A: r.color.A / 5})

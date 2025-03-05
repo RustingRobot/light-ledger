@@ -20,7 +20,7 @@ func NewButton(X int32, Y int32, Width int32, Height int32, Text string, Color r
 }
 
 func (r *Button) Draw(ctx *ui.UiBundle) {
-	rl.DrawRectangleLinesEx(rl.Rectangle{X: float32(r.x), Y: float32(r.y), Width: float32(r.width), Height: float32(r.height)}, 2.0, r.color)
+	rl.DrawRectangleLinesEx(rl.Rectangle{X: float32(r.x), Y: float32(r.y), Width: float32(r.width), Height: float32(r.height)}, 1.0, r.color)
 	if r.hovered {
 		rl.DrawRectangle(r.x, r.y, r.width, r.height, rl.Color{R: r.color.R, G: r.color.G, B: r.color.B, A: r.color.A / 5})
 	}

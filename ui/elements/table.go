@@ -86,7 +86,7 @@ func (r *Table) Update(ctx *ui.UiBundle) {
 		}
 
 		btn := NewButton(r.x, r.y+y_offset, 20, 20, "x", rl.White, func() { r.deleteEntry(r.data, index) })
-		btn.Y_offset = -2
+		btn.Y_offset = -5
 		r.buttons = append(r.buttons, btn)
 		btn.Update(ctx)
 		y_offset += 22

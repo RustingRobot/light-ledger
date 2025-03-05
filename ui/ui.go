@@ -56,5 +56,5 @@ func NewBundle() *UiBundle {
 }
 
 func (r *UiBundle) MeasureText(text string) rl.Vector2 {
-	return rl.Vector2{X: float32(rl.MeasureText(text, 20)), Y: 0}
+	return rl.Vector2{X: float32(rl.MeasureText(text, int32(r.Text_renderer.Size))), Y: 0}
 }
