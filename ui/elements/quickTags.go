@@ -55,9 +55,9 @@ func (r *QuickTags) Draw(ctx *ui.UiBundle) {
 			r.hovered_tag = tag.key
 		}
 
-		rl.DrawRectangle(int32(r.x+cur_x_pos+135), int32(r.y-2), txt_width+8, 28, color)
-		ctx.Text_renderer.DrawText(tag.key, r.x+cur_x_pos+139, r.y+3, rl.DarkGray)
-		cur_x_pos += txt_width + 14
+		rl.DrawRectangle(int32(r.x+cur_x_pos+115), int32(r.y-2), txt_width+10, 25, color)
+		ctx.Text_renderer.DrawText(tag.key, r.x+cur_x_pos+120, r.y+3, rl.DarkGray)
+		cur_x_pos += txt_width + 16
 	}
 }
 

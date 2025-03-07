@@ -43,7 +43,7 @@ func (r *Table) Draw(ctx *ui.UiBundle) {
 		}
 		if entry_date.Month() != month_tracker {
 			rl.DrawRectangle(r.x, r.y+y_offset, 800, 20, rl.White)
-			ctx.Text_renderer.DrawText(fmt.Sprint(entry_date.Year())+" "+entry_date.Month().String(), r.x+40, r.y+y_offset, rl.DarkGray)
+			ctx.Text_renderer.DrawText(fmt.Sprint(entry_date.Year())+" "+entry_date.Month().String(), r.x+40, r.y+y_offset+2, rl.DarkGray)
 			month_tracker = entry_date.Month()
 			y_offset += 22
 		}
@@ -51,20 +51,20 @@ func (r *Table) Draw(ctx *ui.UiBundle) {
 		if index%2 != 0 {
 			rl.DrawRectangle(r.x, r.y+y_offset, 800, 20, rl.Gray)
 		}
-		ctx.Text_renderer.DrawText(entry.Description, r.x+40, r.y+y_offset, r.color)
-		ctx.Text_renderer.DrawText(entry.Cost, r.x+440, r.y+y_offset, r.color)
-		ctx.Text_renderer.DrawText(entry.Date, r.x+540, r.y+y_offset, r.color)
+		ctx.Text_renderer.DrawText(entry.Description, r.x+40, r.y+y_offset+2, r.color)
+		ctx.Text_renderer.DrawText(entry.Cost, r.x+440, r.y+y_offset+2, r.color)
+		ctx.Text_renderer.DrawText(entry.Date, r.x+540, r.y+y_offset+2, r.color)
 
 		cur_x_pos := int32(5)
 		for _, e := range entry.Tags {
 			txt_width := int32(ctx.MeasureText(e).X)
 			rl.DrawRectangle(cur_x_pos+r.x+680+6, r.y+y_offset, txt_width+8, 20, rl.White)
-			ctx.Text_renderer.DrawText(e, cur_x_pos+r.x+680+10, r.y+y_offset, rl.DarkGray)
+			ctx.Text_renderer.DrawText(e, cur_x_pos+r.x+680+10, r.y+y_offset+2, rl.DarkGray)
 			cur_x_pos += txt_width + 14
 		}
 		y_offset += 22
 	}
-	rl.DrawRectangle(r.x, r.y+22, 800, 2, rl.Red)
+	//rl.DrawRectangle(r.x, r.y+22, 800, 2, rl.Red)
 	for _, btn := range r.buttons {
 		btn.Draw(ctx)
 	}

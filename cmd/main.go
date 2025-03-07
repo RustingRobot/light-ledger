@@ -46,7 +46,7 @@ func main() {
 	/* 	useCurrentTimeBox := e.NewCheckbox(100, 238, "use current date", rl.White)
 	   	useCurrentTimeBox.Checked = true */
 
-	tabs := e.NewTabs(10, 50, 28, 150, []string{"add value", "data table", "calendar", "visualization"}, []*e.Container{addTab, tableTab, calendarTab, visualizeTab}, rl.White)
+	tabs := e.NewTabs(10, 50, 25, 150, []string{"add value", "data table", "calendar", "visualization"}, []*e.Container{addTab, tableTab, calendarTab, visualizeTab}, rl.White)
 	dirText := e.NewText(200, 10, db_location, rl.Gray)
 	tagManager := e.NewTagManager(10, 138, 200, 25, rl.White)
 	root.Add(dirText)
@@ -56,10 +56,12 @@ func main() {
 	addTab.Add(dateTextbox)
 	addTab.Add(tagManager)
 	addTab.Add(e.NewQuickTags(5, 176, rl.White, tagManager, &true_data))
-	addTab.Add(e.NewButton(10, 210, 300, 25, "add", rl.White, func() { addEntry(descTextbox, costTextbox, dateTextbox, tagManager) }))
+	addBtn := e.NewButton(10, 210, 300, 25, "add", rl.White, func() { addEntry(descTextbox, costTextbox, dateTextbox, tagManager) })
+	addBtn.Y_offset -= 4
+	addTab.Add(addBtn)
 	root.Add(tabs)
 
-	tableTab.Add(e.NewTable(10, 100, &true_data, rl.White))
+	tableTab.Add(e.NewTable(10, 95, &true_data, rl.White))
 	calendarTab.Add(e.NewText(100, 100, "This is tab 3", rl.White))
 	root.Add(addTab)
 	root.Add(tableTab)

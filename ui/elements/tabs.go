@@ -28,8 +28,9 @@ func (r *Tabs) Draw(ctx *ui.UiBundle) {
 	if r.hovered >= 0 {
 		rl.DrawRectangle(r.x+r.tab_width*r.hovered, r.y, r.tab_width, r.height, rl.Color{R: r.color.R, G: r.color.G, B: r.color.B, A: r.color.A / 5})
 	}
+	rl.DrawRectangle(r.x, r.y+r.height, r.tab_width*int32(len(r.tab_elements)), 1, rl.White)
 	if r.selected >= 0 {
-		rl.DrawRectangle(r.x+r.tab_width*r.selected, r.y+r.height, r.tab_width, 2, rl.Red)
+		rl.DrawRectangle(r.x+r.tab_width*r.selected, r.y+r.height, r.tab_width, 1, rl.Red)
 	}
 	for i, title := range r.titles {
 		ctx.Text_renderer.DrawText(title, r.x+r.tab_width*int32(i)+10, r.y+4, r.color)

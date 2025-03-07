@@ -23,6 +23,7 @@ func NewTagManager(X, Y, width, height int32, color rl.Color) *TagManager {
 	tm := &TagManager{x: X, y: Y, width: width, height: height, color: color, input: tb}
 	tb.Enter_func = tm.addTag
 	tm.add = NewButton(X+width-height, Y, height, height, "+", color, tm.addTag)
+	tm.add.Y_offset -= 4
 	return tm
 }
 
@@ -62,9 +63,9 @@ func (r *TagManager) Draw(ctx *ui.UiBundle) {
 			r.hovered_tag = i
 		}
 
-		rl.DrawRectangle(r.x+r.width+cur_x_pos+6, r.y, txt_width+8, 25, color)
+		rl.DrawRectangle(r.x+r.width+cur_x_pos+5, r.y, txt_width+10, 25, color)
 		ctx.Text_renderer.DrawText(e, r.x+r.width+cur_x_pos+10, r.y+5, rl.DarkGray)
-		cur_x_pos += txt_width + 14
+		cur_x_pos += txt_width + 16
 	}
 }
 
