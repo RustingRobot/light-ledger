@@ -50,7 +50,7 @@ func (r *QuickTags) Draw(ctx *ui.UiBundle) {
 		txt_width := int32(ctx.MeasureText(tag.key).X)
 		color := rl.Gray
 		// nasty update in draw function
-		if rl.CheckCollisionPointRec(rl.GetMousePosition(), rl.Rectangle{X: float32(r.x + cur_x_pos + 135), Y: float32(r.y - 2), Width: float32(txt_width + 8), Height: float32(28)}) {
+		if rl.CheckCollisionPointRec(rl.GetMousePosition(), rl.Rectangle{X: float32(r.x + cur_x_pos + 115), Y: float32(r.y - 2), Width: float32(txt_width + 10), Height: float32(28)}) {
 			color = rl.White
 			r.hovered_tag = tag.key
 		}

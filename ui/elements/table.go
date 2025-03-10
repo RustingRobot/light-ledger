@@ -13,23 +13,25 @@ import (
 )
 
 type Table struct {
-	x, y    int32
-	data    *data.Data
-	color   rl.Color
-	buttons []ui.UiElement
+	x, y                         int32
+	width                        int32
+	cost_pos, date_pos, tags_pos int32
+	data                         *data.Data
+	color                        rl.Color
+	buttons                      []ui.UiElement
 }
-
-const header_margin = 1.5
 
 func NewTable(X int32, Y int32, data *data.Data, color rl.Color) *Table {
 	return &Table{x: X, y: Y, data: data, color: color}
 }
 
 func (r *Table) Draw(ctx *ui.UiBundle) {
-	ctx.Text_renderer.DrawText("description", r.x+40, r.y, r.color)
-	ctx.Text_renderer.DrawText("cost", r.x+440, r.y, r.color)
-	ctx.Text_renderer.DrawText("date", r.x+540, r.y, r.color)
-	ctx.Text_renderer.DrawText("tags", r.x+680, r.y, r.color)
+	ctx.Text_renderer.DrawText("description", 50, r.y, r.color)
+	ctx.Text_renderer.DrawText("cost", r.cost_pos, r.y, r.color)
+	ctx.Text_renderer.DrawText("date", r.date_pos, r.y, r.color)
+	ctx.Text_renderer.DrawText("tags", r.tags_pos, r.y, r.color)
+
+	rl.DrawRectangle(0, r.y+20, int32(rl.GetScreenWidth()), 1, rl.White)
 
 	sort.Sort(*(r.data))
 
@@ -42,24 +44,24 @@ func (r *Table) Draw(ctx *ui.UiBundle) {
 			fmt.Println("error")
 		}
 		if entry_date.Month() != month_tracker {
-			rl.DrawRectangle(r.x, r.y+y_offset, 800, 20, rl.White)
-			ctx.Text_renderer.DrawText(fmt.Sprint(entry_date.Year())+" "+entry_date.Month().String(), r.x+40, r.y+y_offset+2, rl.DarkGray)
+			rl.DrawRectangle(r.x, r.y+y_offset, r.width, 20, rl.White)
+			ctx.Text_renderer.DrawText(fmt.Sprint(entry_date.Year())+" "+entry_date.Month().String(), r.x+5, r.y+y_offset+2, rl.DarkGray)
 			month_tracker = entry_date.Month()
 			y_offset += 22
 		}
 
 		if index%2 != 0 {
-			rl.DrawRectangle(r.x, r.y+y_offset, 800, 20, rl.Gray)
+			rl.DrawRectangle(r.x, r.y+y_offset, r.width, 20, rl.Gray)
 		}
-		ctx.Text_renderer.DrawText(entry.Description, r.x+40, r.y+y_offset+2, r.color)
-		ctx.Text_renderer.DrawText(entry.Cost, r.x+440, r.y+y_offset+2, r.color)
-		ctx.Text_renderer.DrawText(entry.Date, r.x+540, r.y+y_offset+2, r.color)
+		ctx.Text_renderer.DrawText(entry.Description, 50, r.y+y_offset+2, r.color)
+		ctx.Text_renderer.DrawText(entry.Cost, r.cost_pos, r.y+y_offset+2, r.color)
+		ctx.Text_renderer.DrawText(entry.Date, r.date_pos, r.y+y_offset+2, r.color)
 
 		cur_x_pos := int32(5)
 		for _, e := range entry.Tags {
 			txt_width := int32(ctx.MeasureText(e).X)
-			rl.DrawRectangle(cur_x_pos+r.x+680+6, r.y+y_offset, txt_width+8, 20, rl.White)
-			ctx.Text_renderer.DrawText(e, cur_x_pos+r.x+680+10, r.y+y_offset+2, rl.DarkGray)
+			rl.DrawRectangle(cur_x_pos+r.tags_pos-4, r.y+y_offset, txt_width+8, 20, rl.White)
+			ctx.Text_renderer.DrawText(e, cur_x_pos+r.tags_pos, r.y+y_offset+2, rl.DarkGray)
 			cur_x_pos += txt_width + 14
 		}
 		y_offset += 22
@@ -72,6 +74,11 @@ func (r *Table) Draw(ctx *ui.UiBundle) {
 }
 
 func (r *Table) Update(ctx *ui.UiBundle) {
+	r.width = int32(rl.GetScreenWidth())
+	r.cost_pos = r.width - 400
+	r.date_pos = r.width - 300
+	r.tags_pos = r.width - 200
+
 	y_offset := int32(27)
 	var month_tracker time.Month
 
@@ -85,7 +92,7 @@ func (r *Table) Update(ctx *ui.UiBundle) {
 			y_offset += 22
 		}
 
-		btn := NewButton(r.x, r.y+y_offset, 20, 20, "x", rl.White, func() { r.deleteEntry(r.data, index) })
+		btn := NewButton(r.x+2, r.y+y_offset, 20, 20, "x", rl.White, func() { r.deleteEntry(r.data, index) })
 		btn.Y_offset = -5
 		r.buttons = append(r.buttons, btn)
 		btn.Update(ctx)

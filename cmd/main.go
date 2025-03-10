@@ -61,7 +61,7 @@ func main() {
 	addTab.Add(addBtn)
 	root.Add(tabs)
 
-	tableTab.Add(e.NewTable(10, 95, &true_data, rl.White))
+	tableTab.Add(e.NewTable(0, 95, &true_data, rl.White))
 	calendarTab.Add(e.NewText(100, 100, "This is tab 3", rl.White))
 	root.Add(addTab)
 	root.Add(tableTab)

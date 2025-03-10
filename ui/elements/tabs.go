@@ -25,6 +25,7 @@ func NewTabs(X int32, Y int32, height int32, tab_width int32, titles []string, t
 }
 
 func (r *Tabs) Draw(ctx *ui.UiBundle) {
+	rl.DrawRectangle(0, r.y+r.height, int32(rl.GetScreenWidth()), 1, rl.White)
 	if r.hovered >= 0 {
 		rl.DrawRectangle(r.x+r.tab_width*r.hovered, r.y, r.tab_width, r.height, rl.Color{R: r.color.R, G: r.color.G, B: r.color.B, A: r.color.A / 5})
 	}
