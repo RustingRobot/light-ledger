@@ -44,16 +44,16 @@ func (r *TextBox) Draw(ctx *ui.UiBundle) {
 		if r.cursor_pos != r.selection_pos {
 			var pos1, pos2 int32
 			if r.cursor_pos < r.selection_pos {
-				pos1 = r.x + 12 + int32(ctx.MeasureText(r.Text[:r.cursor_pos]).X)
-				pos2 = int32(ctx.MeasureText(r.Text[r.cursor_pos:r.selection_pos]).X)
+				pos1 = r.x + 12 + int32(ctx.TextWidth(r.Text[:r.cursor_pos]))
+				pos2 = int32(ctx.TextWidth(r.Text[r.cursor_pos:r.selection_pos]))
 			} else {
-				pos1 = r.x + 12 + int32(ctx.MeasureText(r.Text[:r.selection_pos]).X)
-				pos2 = int32(ctx.MeasureText(r.Text[r.selection_pos:r.cursor_pos]).X)
+				pos1 = r.x + 12 + int32(ctx.TextWidth(r.Text[:r.selection_pos]))
+				pos2 = int32(ctx.TextWidth(r.Text[r.selection_pos:r.cursor_pos]))
 			}
 			rl.DrawRectangle(pos1, r.y, pos2, r.height, rl.Blue)
 		}
 		// cursor line
-		cursor_x := r.x + int32(ctx.MeasureText(r.Text[:r.cursor_pos]).X) + 12
+		cursor_x := r.x + int32(ctx.TextWidth(r.Text[:r.cursor_pos])) + 12
 		rl.DrawLine(cursor_x, r.y+5, cursor_x, r.y+r.height-5, r.color)
 	}
 	// outline
@@ -82,11 +82,11 @@ func (r *TextBox) Update(ctx *ui.UiBundle) {
 				mouse_pos := int(rl.GetMousePosition().X) - int(r.x) - 10
 				char_nr := 0
 
-				temp_length = int(ctx.MeasureText(r.Text[:char_nr]).X)
+				temp_length = int(ctx.TextWidth(r.Text[:char_nr]))
 				for temp_length < mouse_pos && len(r.Text) > char_nr {
 					char_nr++
 					last_length = temp_length
-					temp_length = int(ctx.MeasureText(r.Text[:char_nr]).X)
+					temp_length = int(ctx.TextWidth(r.Text[:char_nr]))
 				}
 				if char_nr == 0 {
 					r.cursor_pos = 0

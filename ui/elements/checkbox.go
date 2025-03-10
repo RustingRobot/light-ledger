@@ -29,7 +29,7 @@ func (r *Checkbox) Draw(ctx *ui.UiBundle) {
 }
 
 func (r *Checkbox) Update(ctx *ui.UiBundle) {
-	if rl.CheckCollisionPointRec(rl.GetMousePosition(), rl.Rectangle{X: float32(r.x), Y: float32(r.y), Width: ctx.MeasureText(r.label).X + 35, Height: 25}) {
+	if rl.CheckCollisionPointRec(rl.GetMousePosition(), rl.Rectangle{X: float32(r.x), Y: float32(r.y), Width: ctx.TextWidth(r.label) + 35, Height: 25}) {
 		r.hovered = true
 		if rl.IsMouseButtonPressed(rl.MouseButtonLeft) {
 			r.Checked = !r.Checked

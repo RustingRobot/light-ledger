@@ -55,7 +55,7 @@ func (r *TagManager) Draw(ctx *ui.UiBundle) {
 	cur_x_pos := int32(5)
 	r.hovered_tag = -1
 	for i, e := range r.added_tags {
-		txt_width := int32(ctx.MeasureText(e).X)
+		txt_width := int32(ctx.TextWidth(e))
 		color := rl.Gray
 		// nasty update in draw function
 		if rl.CheckCollisionPointRec(rl.GetMousePosition(), rl.Rectangle{X: float32(r.x + r.width + cur_x_pos + 6), Y: float32(r.y), Width: float32(txt_width + 10), Height: float32(r.height)}) {

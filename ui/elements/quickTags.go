@@ -47,7 +47,7 @@ func (r *QuickTags) Draw(ctx *ui.UiBundle) {
 		if !strings.HasPrefix(tag.key, r.tag_manager.GetText()) {
 			continue
 		}
-		txt_width := int32(ctx.MeasureText(tag.key).X)
+		txt_width := int32(ctx.TextWidth(tag.key))
 		color := rl.Gray
 		// nasty update in draw function
 		if rl.CheckCollisionPointRec(rl.GetMousePosition(), rl.Rectangle{X: float32(r.x + cur_x_pos + 115), Y: float32(r.y - 2), Width: float32(txt_width + 10), Height: float32(28)}) {

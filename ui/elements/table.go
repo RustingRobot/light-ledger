@@ -37,16 +37,18 @@ func (r *Table) Draw(ctx *ui.UiBundle) {
 
 	y_offset := int32(27)
 	var month_tracker time.Month
+	var year_tracker int
 
 	for index, entry := range r.data.Expenses {
 		entry_date, err := time.Parse(time.DateOnly, entry.Date)
 		if err != nil {
 			fmt.Println("error")
 		}
-		if entry_date.Month() != month_tracker {
+		if entry_date.Month() != month_tracker || entry_date.Year() != year_tracker {
 			rl.DrawRectangle(r.x, r.y+y_offset, r.width, 20, rl.White)
 			ctx.Text_renderer.DrawText(fmt.Sprint(entry_date.Year())+" "+entry_date.Month().String(), r.x+5, r.y+y_offset+2, rl.DarkGray)
 			month_tracker = entry_date.Month()
+			year_tracker = entry_date.Year()
 			y_offset += 22
 		}
 
@@ -59,7 +61,7 @@ func (r *Table) Draw(ctx *ui.UiBundle) {
 
 		cur_x_pos := int32(5)
 		for _, e := range entry.Tags {
-			txt_width := int32(ctx.MeasureText(e).X)
+			txt_width := int32(ctx.TextWidth(e))
 			rl.DrawRectangle(cur_x_pos+r.tags_pos-4, r.y+y_offset, txt_width+8, 20, rl.White)
 			ctx.Text_renderer.DrawText(e, cur_x_pos+r.tags_pos, r.y+y_offset+2, rl.DarkGray)
 			cur_x_pos += txt_width + 14
@@ -81,14 +83,16 @@ func (r *Table) Update(ctx *ui.UiBundle) {
 
 	y_offset := int32(27)
 	var month_tracker time.Month
+	var year_tracker int
 
 	for index, entry := range r.data.Expenses {
 		entry_date, err := time.Parse(time.DateOnly, entry.Date)
 		if err != nil {
-			fmt.Println("error")
+			continue
 		}
-		if entry_date.Month() != month_tracker {
+		if entry_date.Month() != month_tracker || entry_date.Year() != year_tracker {
 			month_tracker = entry_date.Month()
+			year_tracker = entry_date.Year()
 			y_offset += 22
 		}
 
